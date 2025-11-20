@@ -1,0 +1,126 @@
+@media screen and (max-width: 1200px) {
+    .everything{
+        padding :1rem 1rem !important;
+    }
+    .navigation-home{
+    padding: 1em 1em !important;
+   }
+    section.mainSection section.mainSection-main{
+        width: 100%;
+        flex: 1 1 100%;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+    section.mainSection-main div.mainSection-main-cta div.cta-button {
+    margin: 0 auto;
+}
+    section.mainSection section.mainSection-Img_Video-Prnt{
+        width: 100%;
+        flex: 1 1 100%;
+    }
+    section.mainSection .mainSection-main-clientReviews{
+        flex-direction: column;
+    }
+    .clientProfiles{
+    display: flex;
+    margin: 0 auto;
+    }
+    .search-bar-parent{
+        width: 100%;
+        flex-direction: row-reverse !important;
+    }
+    
+}
+@media screen and (min-width: 610px)  {
+    /* *{ 
+        display: none;
+    } */
+.nav-search-searchedProducts{
+        flex-wrap: nowrap !important;
+}
+.trendingAndSearched-parent{
+    display: flex;
+    overflow-x: scroll !important;
+}
+.search-bar-parent{
+    max-width: 300px !important;
+    position: sticky;
+    left: 0;
+} 
+}
+
+@media screen and (max-width: 768px) {
+    
+section.mainSection-main div.mainSection-main-tagline{
+    margin: 0 auto !important;
+}
+    .mainNav{
+        display: none !important;
+    }
+    
+    .mainNav a{
+        font-size: 0.8em;
+    }
+    
+    .diff3{
+        gap: 1em;
+    }
+    
+    .search-bar-parent{
+        width: 100%;
+    
+    }
+    
+    .drop-down-parent{
+        width: 45%;
+        min-width: 90px;
+    }
+    
+    section.mainSection section.mainSection-main{
+        padding: 1.5em 1.5em;
+    }
+    
+    section.mainSection .mainSection-main-clientReviews{
+        flex-direction: column;
+    }
+    
+    section.mainSection section.mainSection-Img_Video-Prnt .mainSection-Img_Video{
+        min-height: 300px;
+    }
+    .clientProfiles{
+    display: flex;
+    margin: 0 auto;
+}
+section.mainSection-main div.mainSection-main-cta div.cta-button {
+    margin: 0 auto;
+}
+}
+@media screen and (max-width: 480px) {
+    
+    .headerCallToAction{
+        margin-left: 0;
+    }
+    
+    .search-bar-parent{
+        min-width: 150px;
+    }
+    
+    .drop-down-parent{
+        width: 40%;
+    }
+    
+    section.mainSection section.mainSection-main{
+        padding: 1.2em 1.2em;
+    }
+    
+    section.mainSection div.mainSection-main-cta div.cta-button::before{
+        width: 25px;
+        height: 25px;
+        right: -30px;
+    }
+    
+    section.mainSection section.mainSection-Img_Video-Prnt .mainSection-Img_Video{
+        min-height: 250px;
+    }
+}
