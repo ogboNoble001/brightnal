@@ -13,10 +13,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
 // export { runActive };
 const products = [
-  { src: "/frontend/res/file_0000000013fc720a85c48aaf301c7469.png" },
+  { src: "/frontend/res/1000068239-removebg-preview.png" },
   { src: "/frontend/res/1000067567-removebg-preview.png" },
   { src: "/frontend/res/file_0000000013fc720a85c48aaf301c7469.png" },
-  { src: "/frontend/res/1000067567-removebg-preview.png" }
+  { src: "/frontend/res/1000068179.png" }
 ];
 
 const bgColors = [
