@@ -47,3 +47,20 @@ products.forEach(item => {
   wrap.appendChild(bg);
   table.appendChild(wrap);
 });
+async function checkServerStatus() {
+  try {
+    const res = await fetch("https://your-backend-domain.com/status");
+    const data = await res.json();
+    console.log("Server status:", data);
+
+    if (data.cloudinary && data.database) {
+      console.log("Both Cloudinary and Neon DB are connected ✅");
+    } else {
+      console.log("Something is not connected ❌", data);
+    }
+  } catch (err) {
+    console.error("Could not reach backend:", err);
+  }
+}
+
+checkServerStatus();

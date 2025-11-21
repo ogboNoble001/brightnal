@@ -37,6 +37,10 @@ async function testConnections() {
 
 testConnections();
 
+app.get("/", (req, res) => {
+  res.send("Brightnal backend is running ✔");
+});
+
 app.get("/status", (req, res) => {
   res.json(status);
 });
