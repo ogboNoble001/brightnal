@@ -93,6 +93,9 @@ body {
 .m-r{
     margin-right: auto;
 }
+.m-t{
+    margin-top: .15em;
+}
 .noShaking{
     display: flex;
     flex: 0 0 auto;
