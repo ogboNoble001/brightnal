@@ -472,12 +472,12 @@ footer {
     
     background-color: #F4F4F4;
     padding: 3em 2em;
-    line-height: 1.7;
+    line-height: 1.5;
     font-size: small;
     letter-spacing: .07em;
 }
 .footer-div{
-    margin-left: 1.5em;
+    
 }
 .hamburger {
     display: block;
