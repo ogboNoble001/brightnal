@@ -49,7 +49,7 @@ products.forEach(item => {
 });
 async function checkServerStatus() {
   try {
-    const res = await fetch("https://your-backend-domain.com/status");
+    const res = await fetch("https://brightnal.onrender.com");
     const data = await res.json();
     console.log("Server status:", data);
 

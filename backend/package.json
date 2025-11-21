@@ -1,6 +1,7 @@
 {
         "name": "brightnal",
         "version": "1.0.0",
+        "description": "Brightnal backend server",
         "type": "module",
         "main": "server.js",
         "scripts": {
@@ -8,6 +9,9 @@
                 "dev": "nodemon server.js",
                 "test": "node server.js"
         },
+        "keywords": ["express", "cloudinary", "neon", "backend"],
+        "author": "",
+        "license": "ISC",
         "dependencies": {
                 "@neondatabase/serverless": "^0.9.0",
                 "cloudinary": "^1.41.0",
@@ -16,5 +20,8 @@
         },
         "devDependencies": {
                 "nodemon": "^3.0.2"
+        },
+        "engines": {
+                "node": ">=18.0.0"
         }
 }

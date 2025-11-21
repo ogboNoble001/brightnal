@@ -1,7 +1,6 @@
 const overlay = document.querySelector('.mainOverlay');
 const mobileNav = document.querySelector('div.sidebar');
 const hamburger = document.querySelector('.hamburger');
-const closeWithIcn= document.querySelector('.sidebar-close')
 
 // Function to open/close overlay
 function toggleOverlay(open) {
@@ -34,6 +33,3 @@ overlay.addEventListener('click', e => {
         toggleMobileNav(false);
     }
 });
-closeWithIcn.addEventListener('click', ()=>{
-    toggleMobileNav(false)
-})
