@@ -46,7 +46,21 @@ products.forEach(item => {
   wrap.appendChild(bg);
   table.appendChild(wrap);
 });
-
+  function dropDownOptionDiv(displayCurrentOptionBox, arrOfPossibleOptions) {
+    const cnstDisplayCurrentOptionBox = document.querySelector(displayCurrentOptionBox) 
+    const displayOptionBox = document.createElement('div')
+    displayOptionBox.classList.add('displayOptionBox')
+    cnstDisplayCurrentOptionBox.appendChild(displayOptionBox)
+  cnstDisplayCurrentOptionBox.style.cssText= `
+  position: relative;
+    `
+    
+    cnstDisplayCurrentOptionBox.addEventListener('click', ()=>{
+      
+      displayOptionBox.style.display= 'flex'
+    })
+  }
+  
 async function checkServerStatus() {
   try {
     const res = await fetch("https://brightnal.onrender.com/status");
