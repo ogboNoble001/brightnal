@@ -11,7 +11,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
 });
 
-// export { runActive };
 const products = [
   { src: "/frontend/res/1000068239-removebg-preview.png" },
   { src: "/frontend/res/1000067567-removebg-preview.png" },
@@ -47,9 +46,10 @@ products.forEach(item => {
   wrap.appendChild(bg);
   table.appendChild(wrap);
 });
+
 async function checkServerStatus() {
   try {
-    const res = await fetch("https://brightnal.onrender.com");
+    const res = await fetch("https://brightnal.onrender.com/status");
     const data = await res.json();
     console.log("Server status:", data);
 
