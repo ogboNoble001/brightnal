@@ -5,9 +5,9 @@ import { neon } from "@neondatabase/serverless";
 const app = express();
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_KEY,
+  api_secret: process.env.CLOUD_SECRET
 });
 
 const sql = neon(process.env.DATABASE_URL);
@@ -25,7 +25,7 @@ async function testConnections() {
   } catch {
     console.log("Neon database connection failed ❌");
   }
-
+  
   try {
     await cloudinary.api.ping();
     console.log("Cloudinary connected ✔");
@@ -41,5 +41,5 @@ app.get("/status", (req, res) => {
   res.json(status);
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 7700;
 app.listen(PORT, () => console.log("Server running on port " + PORT));
