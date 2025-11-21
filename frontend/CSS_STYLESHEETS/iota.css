@@ -137,8 +137,8 @@ main{
 .logo{
     width: 25px;
     height: 25px;
-    transform: scale(1.9);
-    margin: 0 0 0 .6em;
+    transform: scale(1.67);
+    margin: 0 0 0 .2em;
 }
 .mainNav{
     display: flex;
