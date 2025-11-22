@@ -129,7 +129,7 @@ main{
 .navigation-home{
     position: sticky;
     padding: 1em 4em;
-    z-index: 999;
+    z-index: 1999;
     top: 0;
     transition: box-shadow ease-in-out .2s;
     background-color: #FFFFFF;
@@ -777,7 +777,7 @@ border-radius: 64px 64px 0 0;
     animation: 4s spin linear infinite;
 }
 .premiumBtn::before{
-    filter: blur(.3rem);
+    filter: blur(.2em);
     opacity: .5;
 }
 @keyframes spin{
