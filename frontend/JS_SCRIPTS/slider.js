@@ -22,10 +22,6 @@ function toggleMobileNav(open) {
     }
 }
 
-// Hamburger click
-hamburger.addEventListener('click', () => {
-    toggleMobileNav(true);
-});
 
 // Close overlay when clicking outside
 overlay.addEventListener('click', e => {
