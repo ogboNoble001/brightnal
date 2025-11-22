@@ -137,8 +137,8 @@ main{
 .logo{
     width: 25px;
     height: 25px;
-    transform: scale(1.77);
-    margin: .07em 0 0 0em;
+    transform: scale(1.9);
+    margin: .06em 0 0 .3em;
 }
 .mainNav{
     display: flex;
@@ -163,7 +163,7 @@ main{
 }
 
 .headerCallToAction{
-    margin-left: 1em;
+    
 }
 
 .headerCallToAction .Icn {
@@ -749,6 +749,7 @@ border-radius: 64px 64px 0 0;
     padding: 6px ;
     padding: .4rem .8rem;
     border-radius: 50px;
+    margin-left: .2em !important;
     font-weight: bold;
     color: #000;
     font-family: var(--font-family-base), sans-serif;
