@@ -855,7 +855,7 @@ border-radius: 64px 64px 0 0;
     view-timeline-name: --item-timeline;
 animation: slide-fade-in both;
 animation-timeline: --item-timeline;
-animation-range: contain 0% contain 50%;
+animation-range: cover 0% contain 50%;
     width: 100%;
     display: block;
     margin-bottom: 1em;
