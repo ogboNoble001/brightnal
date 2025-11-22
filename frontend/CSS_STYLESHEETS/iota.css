@@ -137,8 +137,8 @@ main{
 .logo{
     width: 25px;
     height: 25px;
-    transform: scale(1.67);
-    margin: 0 0 0 .2em;
+    transform: scale(1.77);
+    margin: .07em 0 0 0em;
 }
 .mainNav{
     display: flex;
@@ -814,5 +814,96 @@ border-radius: 64px 64px 0 0;
     align-items:flex-start;
     justify-content: flex-start;
     gap: .43em;
-    
         }
+        
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+
+
+@keyframes spin {
+    to {
+        --angle: 360deg;
+    }
+}
+      .premiumBtn {
+    position: relative;
+    background: #F8F8FC;
+    border: none;
+    padding: 6px ;
+    padding: .4rem .8rem;
+    border-radius: 50px;
+    font-weight: bold;
+    color: #000;
+    font-family: var(--font-family-base), sans-serif;
+    
+    cursor: pointer;
+}
+@property --angle{
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+.premiumBtn::after,
+.premiumBtn::before {
+
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: -1;
+    padding: .85rem 2rem;
+    border-radius: 50px;
+    background-image: conic-gradient( from var(--angle), transparent, #006aff, #ff00a5, #ff4545);
+    animation: 4s spin linear infinite;
+}
+.premiumBtn::before{
+    filter: blur(.3rem);
+    opacity: .5;
+}
+@keyframes spin{
+    from{
+        --angle: 0deg;
+    }
+    to{
+        --angle: 360deg;
+    }
+}
+/*
+.premiumBtn .shine {
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-20deg);
+  animation: shimmer 2.5s infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.premiumBtn > *:not(.shine) {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -75%;
+  }
+  100% {
+    left: 125%;
+  }
+} */
