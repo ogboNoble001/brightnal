@@ -56,5 +56,21 @@ window.addEventListener("DOMContentLoaded", () => {
     
     div.appendChild(imageEl);
     container.appendChild(div);
-  });
+  });const viewMore = document.querySelector('.view-more');
+
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY; // how much user has scrolled
+  const windowHeight = window.innerHeight; // viewport height
+  const docHeight = document.documentElement.scrollHeight; // total page height
+  
+  const distanceToBottom = docHeight - (scrollTop + windowHeight);
+  
+  // Fade out when distance to bottom is less than 200px
+  if (distanceToBottom < 200) {
+    const opacity = distanceToBottom / 200; // value from 0 to 1
+    viewMore.style.opacity = opacity;
+  } else {
+    viewMore.style.opacity = 1;
+  }
 });
+})

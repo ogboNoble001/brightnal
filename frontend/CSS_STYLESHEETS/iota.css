@@ -152,6 +152,7 @@ body {
     font-size: small;
     color: whitesmoke;
     border-radius: 32px;
+  transition: opacity 0.3s ease;
 }
 .overlay h1, .overlay span {
     font-family: "Playfair Display", serif !important;
