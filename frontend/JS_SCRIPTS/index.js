@@ -1,6 +1,12 @@
 window.addEventListener("DOMContentLoaded", () => {
   if (typeof AOS !== "undefined") {
-    AOS.init({ once: true });
+    AOS.init({
+  offset: 300,
+  delay: 0, 
+  easing: 'ease-in-out',
+  once: false,
+  anchorPlacement: 'top-bottom'
+});
   }
   
   if (typeof lucide !== "undefined") {
@@ -103,7 +109,7 @@ window.addEventListener("DOMContentLoaded", () => {
     
     if (distanceToBottom > 0) {
       window.scrollBy({
-        top: 300,
+        top: 500,
         left: 0,
         behavior: 'smooth'
       });
