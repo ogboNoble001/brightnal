@@ -128,12 +128,25 @@ body {
 }
 
 .overlay-content {
+    position: relative;
     text-align: center;
     padding: 20px;
     max-width: 500px;
     width: 90%;
 }
 
+.view-more{
+    bottom: -10rem;
+    right: 0;
+    background-color: #1B1B1F;
+    position: absolute;
+    width: 100px;
+    height: 30px;
+    font-family: "Cabinet Grotesk", sans-serif;
+    font-size: small;
+    color: whitesmoke;
+    border-radius: 32px;
+}
 .overlay h1, .overlay span {
     font-family: "Playfair Display", serif !important;
     font-style: italic;

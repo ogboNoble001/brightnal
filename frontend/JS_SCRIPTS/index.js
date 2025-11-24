@@ -27,9 +27,10 @@ window.addEventListener("DOMContentLoaded", () => {
     { type: "image", src: "/frontend/res/fc9d81fada2b43fc86188cbfadf1f58e.jpg" },
     { type: "image", src: "/frontend/res/daebc7a49e1a435eaf87e1d4fa71e21a.jpg" },
     { type: "image", src: "/frontend/res/4ea7a7b89f6041a6a0a7858f6ce7c642.jpg" },
-    { type: "image", src: "/frontend/res/cbacc77b0a1343c3b0aa3a7a6eaa6163.jpg" }
+    { type: "image", src: "/frontend/res/cbacc77b0a1343c3b0aa3a7a6eaa6163.jpg" },
+        { type: "image", src: "  /frontend/res/2a01626af3fa4e788eddfba0fb65f378.jpg" }
   ];
-  
+
   // Fixed: Added delay calculation for word animations
   const words = document.querySelectorAll('.animated-text .word');
   words.forEach((word, index) => {
