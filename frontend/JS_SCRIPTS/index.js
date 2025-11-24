@@ -1,7 +1,7 @@
 window.addEventListener("DOMContentLoaded", () => {
   if (typeof AOS !== "undefined") {
     AOS.init({
-
+ offset: 300,
   delay: 0, 
   easing: 'ease-in-out',
   once: false,
