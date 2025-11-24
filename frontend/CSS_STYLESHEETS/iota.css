@@ -90,7 +90,7 @@ body {
     view-timeline-name: --item-timeline;
     animation: slide-fade-in both;
     animation-timeline: --item-timeline;
-    animation-range: cover -10% contain 20%;
+    animation-range: cover -10% contain 50%;
     width: 100%;
     display: block;
     margin-bottom: 1em;
@@ -110,7 +110,11 @@ body {
     display: block;
     border-radius: 16px;
 }
-
+.masonry-item video{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
 /* Overlay */
 .overlay {
     position: fixed;
@@ -122,7 +126,7 @@ body {
     background: rgba(0, 0, 0, 0.45);
     z-index: 1000;
     display: flex;
-    backdrop-filter: blur(1px);
+    backdrop-filter: blur(.5px);
     align-items: center;
     justify-content: center;
 }
@@ -136,11 +140,13 @@ body {
 }
 
 .view-more{
-    bottom: 3em;
+    position: fixed;
+    z-index: 122222;
+    bottom:  3em;
     right: 2em;
     background-color: #1B1B1F;
-    position: fixed;
     width: 100px;
+    box-shadow: inset 0 2px 2px hsla(0, 0%, 0%, 0.1);
     height: 30px;
     font-family: "Cabinet Grotesk", sans-serif;
     font-size: small;
@@ -271,7 +277,7 @@ body {
 
 .overlay-footer a {
     color: #fff;
-    text-decoration: underline;
+    
 }
 
 /* Media Queries */
@@ -315,4 +321,7 @@ body {
 @keyframes slideUp {
   0% { transform: translateY(100%); opacity: 0; }
   100% { transform: translateY(0); opacity: 1;  }
+}
+a{
+    text-decoration: none;
 }
