@@ -132,7 +132,7 @@ main{
     z-index: 1999;
     top: 0;
     transition: box-shadow ease-in-out .2s;
-    background-color: #FFFFFF;
+    background-color: #F5F7FA;
 }
 .logo{
     width: 25px;
@@ -143,14 +143,13 @@ main{
 .mainNav{
     display: flex;
     align-items: center;
-    font-family: "Noto Sans", sans-serif;
     gap: 4em;
     font-weight: 300;
 }
 .scrolled{
   width: 100%;
   padding: 1em 1em; 
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 
 }
 .mainNav a{
@@ -875,4 +874,22 @@ animation-range: cover 0% contain 50%;
             transform: scale(1);
     opacity: 1;
   }
+}
+.CTA-section {
+    height: 100%;
+    width: 100%;
+    background-image: url("/frontend/res/1000069742_upscayl_4x.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative; /* IMPORTANT */
+}
+
+.CTA-section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4); /* overlay color + transparency */
+    
+    pointer-events: none; /* overlay won’t block clicks */
 }

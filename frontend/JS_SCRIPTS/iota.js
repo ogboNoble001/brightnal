@@ -5,7 +5,7 @@ window.addEventListener('DOMContentLoaded', () => {
 arrowNav.addEventListener('click', () => {
     window.location.href = "/frontend/index/index.html";
 });
-    // Scroll event to add shadow to navbar on scroll
+    
     const navbar = document.querySelector('.navigation-home');
     window.addEventListener('scroll', () => {});
     window.addEventListener('scroll', () => {
