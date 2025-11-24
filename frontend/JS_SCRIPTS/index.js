@@ -1,20 +1,15 @@
 window.addEventListener("DOMContentLoaded", () => {
-  const arrayOfTrendingAndSearched = ['Suits', 'Traditionals', 'Kids', 'Skirts', 'Ankaras', 'Watches'];
-  const trendingAndSearchedDiv = document.querySelector('.trendingAndSearched-parent');
-  if (trendingAndSearchedDiv) {
-    arrayOfTrendingAndSearched.forEach(item => {
-      const itemDiv = document.createElement('div');
-      itemDiv.classList.add('trendingAndSearched');
-      itemDiv.textContent = item;
-      trendingAndSearchedDiv.appendChild(itemDiv);
-    });
+  if (typeof AOS !== "undefined") {
+    AOS.init({ once: true });
   }
   
-  if (typeof lucide !== 'undefined') {
+  if (typeof lucide !== "undefined") {
     lucide.createIcons();
   }
   
-  const mediaItems = [
+  document.getElementById('overlay').style.transition = 'opacity 0.3s ease';
+  
+  const images = [
     { type: "image", src: "/frontend/res/04563643a2aa4c8997006ccb1b82e3b0.jpg" },
     { type: "image", src: "/frontend/res/05a7f184a8924a7eb00393d653b8c08f.jpg" },
     { type: "image", src: "/frontend/res/2e11750afa3341cf9a59fb05d3de7b2c.jpg" },
@@ -35,78 +30,30 @@ window.addEventListener("DOMContentLoaded", () => {
     { type: "image", src: "/frontend/res/cbacc77b0a1343c3b0aa3a7a6eaa6163.jpg" }
   ];
   
-  const masonryContainer = document.querySelector(".masonry");
-  if (masonryContainer) {
-    mediaItems.forEach((item, index) => {
-      let element;
-      if (item.type === "image") {
-        element = document.createElement("img");
-        element.src = item.src;
-        element.alt = "";
-      } else if (item.type === "video") {
-        element = document.createElement("video");
-        element.src = item.src;
-        element.preload = "none";
-        element.autoplay = true;
-        element.muted = true;
-        element.loop = true;
-        element.playsInline = true;
-      }
-      
-      // Add AOS attributes
-      element.setAttribute("data-aos", "fade-up"); // Example animation
-      element.setAttribute("data-aos-delay", `${index * 50}`); // Stagger effect
-      element.setAttribute("data-aos-duration", "800");
-      
-      masonryContainer.appendChild(element);
-    });
-    
-    // Initialize AOS
-    if (typeof AOS !== "undefined") {
-      AOS.init({
-        once: true // animate only once
-      });
-    }
-  }
+  // Fixed: Added delay calculation for word animations
+  const words = document.querySelectorAll('.animated-text .word');
+  words.forEach((word, index) => {
+    const delay = index * 150; // Stagger each word by 150ms
+    word.setAttribute('data-aos', 'fade-up');
+    word.setAttribute('data-aos-duration', '600');
+    word.setAttribute('data-aos-delay', delay);
+  });
   
-  // Drop-down function remains the same
-  function dropDownOptionDiv(displayCurrentOptionBox, arrOfPossibleOptions) {
-    const cnstDisplayCurrentOptionBox = document.querySelector(displayCurrentOptionBox);
-    if (!cnstDisplayCurrentOptionBox) return;
-    
-    const displayOptionBox = document.createElement('div');
-    displayOptionBox.classList.add('displayOptionBox');
-    displayOptionBox.style.display = 'none';
-    
-    arrOfPossibleOptions.forEach(option => {
-      const optionDiv = document.createElement('div');
-      optionDiv.textContent = option;
-      optionDiv.classList.add('option-item');
-      displayOptionBox.appendChild(optionDiv);
-    });
-    
-    cnstDisplayCurrentOptionBox.appendChild(displayOptionBox);
-    cnstDisplayCurrentOptionBox.style.position = 'relative';
-    
-    cnstDisplayCurrentOptionBox.addEventListener('click', () => {
-      displayOptionBox.style.display = displayOptionBox.style.display === 'flex' ? 'none' : 'flex';
-    });
-  }
+  const container = document.querySelector('.masonry-container');
   
-  async function checkServerStatus() {
-    try {
-      const res = await fetch("https://brightnal.onrender.com/status");
-      const data = await res.json();
-      console.log("Server status:", data);
-      if (data.cloudinary && data.database) {
-        console.log("Both Cloudinary and Neon DB are connected ✅");
-      } else {
-        console.log("Something is not connected ❌", data);
-      }
-    } catch (err) {
-      console.error("Could not reach backend:", err);
-    }
-  }
-  
-  checkServerStatus();
+  images.forEach((img, index) => {
+    const delay = 100 + index * 100;
+    const div = document.createElement('div');
+    div.className = 'masonry-item';
+    div.setAttribute('data-aos', 'fade-up');
+    div.setAttribute('data-aos-duration', '600');
+    div.setAttribute('data-aos-delay', delay);
+    
+    const imageEl = document.createElement('img');
+    imageEl.src = img.src;
+    imageEl.alt = img.alt || 'Gallery image';
+    
+    div.appendChild(imageEl);
+    container.appendChild(div);
+  });
 });
