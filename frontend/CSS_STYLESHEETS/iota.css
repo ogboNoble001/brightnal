@@ -322,3 +322,6 @@ body {
 a{
     text-decoration: none;
 }
+.view-svg{
+    margin-bottom: .2em;
+}

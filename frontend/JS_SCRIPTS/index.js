@@ -16,7 +16,6 @@ window.onload = () => {
   document.getElementById('overlay').style.transition = 'opacity 0.3s ease';
   
   const viewMore = document.querySelector('.view-more');
-  const viewMoreText = viewMore.querySelector('span');
   const viewMoreIcon = viewMore.querySelector('svg');
   viewMore.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
   viewMoreIcon.style.transition = 'transform 0.3s ease';
@@ -31,8 +30,18 @@ window.onload = () => {
       const opacity = distanceToBottom / 200;
       viewMore.style.opacity = opacity;
       
+      if (distanceToBottom <= 50) {
+        viewMoreIcon.style.transform = `rotate(${180 * (1 - distanceToBottom / 50)}deg)`;
+      } else {
+        viewMoreIcon.style.transform = 'rotate(0deg)';
+      }
+      
       if (distanceToBottom <= 0) {
-        viewMoreIcon.style.transform = 'rotate(180deg)';
+        viewMore.style.opacity = 0;
+        setTimeout(() => {
+          viewMoreIcon.style.transform = 'rotate(180deg)';
+          viewMore.style.opacity = 1;
+        }, 300);
       }
     } else {
       viewMore.style.opacity = 1;
