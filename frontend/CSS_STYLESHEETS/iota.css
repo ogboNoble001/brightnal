@@ -87,10 +87,7 @@ body {
     position: relative;
     overflow: hidden;
     border-radius: 16px;
-    view-timeline-name: --item-timeline;
-    animation: slide-fade-in both;
-    animation-timeline: --item-timeline;
-    animation-range: cover -10% contain 50%;
+    
     width: 100%;
     display: block;
     margin-bottom: 1em;
@@ -126,7 +123,7 @@ body {
     background: rgba(0, 0, 0, 0.45);
     z-index: 1000;
     display: flex;
-    backdrop-filter: blur(.5px);
+    backdrop-filter: blur(2px);
     align-items: center;
     justify-content: center;
 }
