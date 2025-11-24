@@ -30,11 +30,10 @@ window.addEventListener("DOMContentLoaded", () => {
     { type: "image", src: "/frontend/res/cbacc77b0a1343c3b0aa3a7a6eaa6163.jpg" },
     { type: "image", src: "/frontend/res/2a01626af3fa4e788eddfba0fb65f378.jpg" }
   ];
-
-  // Fixed: Added delay calculation for word animations
+  
   const words = document.querySelectorAll('.animated-text .word');
   words.forEach((word, index) => {
-    const delay = index * 150; // Stagger each word by 150ms
+    const delay = index * 150;
     word.setAttribute('data-aos', 'fade-up');
     word.setAttribute('data-aos-duration', '600');
     word.setAttribute('data-aos-delay', delay);
@@ -56,21 +55,21 @@ window.addEventListener("DOMContentLoaded", () => {
     
     div.appendChild(imageEl);
     container.appendChild(div);
-  });const viewMore = document.querySelector('.view-more');
-
-window.addEventListener('scroll', () => {
-  const scrollTop = window.scrollY; // how much user has scrolled
-  const windowHeight = window.innerHeight; // viewport height
-  const docHeight = document.documentElement.scrollHeight; // total page height
+  });
   
-  const distanceToBottom = docHeight - (scrollTop + windowHeight);
+  const viewMore = document.querySelector('.view-more');
   
-  // Fade out when distance to bottom is less than 200px
-  if (distanceToBottom < 200) {
-    const opacity = distanceToBottom / 200; // value from 0 to 1
-    viewMore.style.opacity = opacity;
-  } else {
-    viewMore.style.opacity = 1;
-  }
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+    const distanceToBottom = docHeight - (scrollTop + windowHeight);
+    
+    if (distanceToBottom < 200) {
+      const opacity = distanceToBottom / 200;
+      viewMore.style.opacity = opacity;
+    } else {
+      viewMore.style.opacity = 1;
+    }
+  });
 });
-})
