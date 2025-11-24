@@ -136,10 +136,10 @@ body {
 }
 
 .view-more{
-    bottom: -10rem;
-    right: 0;
+    bottom: 3em;
+    right: 2em;
     background-color: #1B1B1F;
-    position: absolute;
+    position: fixed;
     width: 100px;
     height: 30px;
     font-family: "Cabinet Grotesk", sans-serif;
