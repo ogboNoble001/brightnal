@@ -123,7 +123,6 @@ body {
     background: rgba(0, 0, 0, 0.45);
     z-index: 1000;
     display: flex;
-    
     align-items: center;
     justify-content: center;
 }
@@ -181,7 +180,6 @@ body {
     display: inline-block;
 }
 
-/* Texture Effect for specific words */
 .word.texture {
     background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f7dc6f);
     background-size: 300% 300%;
