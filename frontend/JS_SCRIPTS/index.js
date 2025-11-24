@@ -41,7 +41,7 @@ window.addEventListener("DOMContentLoaded", () => {
   
   const container = document.querySelector('.masonry-container');
   
-  images.forEach((img, index) => {
+  images.forEach((item, index) => {
     const delay = 100 + index * 100;
     const div = document.createElement('div');
     div.className = 'masonry-item';
@@ -49,15 +49,31 @@ window.addEventListener("DOMContentLoaded", () => {
     div.setAttribute('data-aos-duration', '600');
     div.setAttribute('data-aos-delay', delay);
     
-    const imageEl = document.createElement('img');
-    imageEl.src = img.src;
-    imageEl.alt = img.alt || 'Gallery image';
+    if (item.type === 'video') {
+      const videoEl = document.createElement('video');
+      videoEl.src = item.src;
+      videoEl.controls = false;
+      videoEl.muted = true;
+      videoEl.loop = true;
+      videoEl.playsInline = true;
+      videoEl.preload = 'metadata';
+      videoEl.autoplay = true;
+      div.appendChild(videoEl);
+    } else {
+      const imageEl = document.createElement('img');
+      imageEl.src = item.src;
+      imageEl.alt = item.alt || 'Gallery image';
+      div.appendChild(imageEl);
+    }
     
-    div.appendChild(imageEl);
     container.appendChild(div);
   });
   
   const viewMore = document.querySelector('.view-more');
+  const viewMoreText = viewMore.querySelector('span');
+  const viewMoreIcon = viewMore.querySelector('svg');
+  viewMore.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+  viewMoreIcon.style.transition = 'transform 0.3s ease';
   
   window.addEventListener('scroll', () => {
     const scrollTop = window.scrollY;
@@ -68,8 +84,39 @@ window.addEventListener("DOMContentLoaded", () => {
     if (distanceToBottom < 200) {
       const opacity = distanceToBottom / 200;
       viewMore.style.opacity = opacity;
+      
+      if (distanceToBottom <= 0) {
+        viewMoreIcon.style.transform = 'rotate(180deg)';
+      }
     } else {
       viewMore.style.opacity = 1;
+      viewMoreIcon.style.transform = 'rotate(0deg)';
+    }
+  });
+  
+  viewMore.addEventListener('click', () => {
+    viewMore.style.transform = 'translateY(20px)';
+    setTimeout(() => {
+      viewMore.style.transform = 'translateY(0)';
+    }, 300);
+    
+    const scrollTop = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+    const distanceToBottom = docHeight - (scrollTop + windowHeight);
+    
+    if (distanceToBottom > 0) {
+      window.scrollBy({
+        top: 300,
+        left: 0,
+        behavior: 'smooth'
+      });
+    } else {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
     }
   });
 });
