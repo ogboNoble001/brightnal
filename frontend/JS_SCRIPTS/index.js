@@ -1,7 +1,7 @@
 window.onload = () => {
   if (typeof AOS !== "undefined") {
     AOS.init({
-
+      offset: 100,
       delay: 0,
       easing: 'ease-in-out',
       once: false,
