@@ -1,3 +1,4 @@
+``` html title URL link_text
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,11 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brightnal's Concepts</title>
     <link rel="shortcut icon" type="image/x-icon" href="/frontend/res/file_00000000d5b47246a67fb09c50189192.png">
-    <link rel="stylesheet" href="/frontend/search/search.css">
     <link rel="stylesheet" href="/frontend/util/CSS_STYLESHEETS/util_main.css">
 </head>
-<body class="diff4">
-    <nav class="notchNavBar notAligned  jc-sb">
+<body>
+            <nav class="notchNavBar notAligned  jc-sb">
     <div class="notAligned flex-col" data-url="explore">
 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class=" transform-m-e lucide lucide-mouse-pointer-click-icon lucide-mouse-pointer-click"><path d="M14 4.1 12 6"/><path d="m5.1 8-2.9-.8"/><path d="m6 12-1.9 2"/><path d="M7.2 2.2 8 5.1"/><path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z"/></svg>
           <span class="active">Explore</span>
@@ -29,13 +29,17 @@
     <span>Me</span>
     </div>
     </nav>
-        <script src="/frontend/search/search.js" type="text/javascript" charset="utf-8"></script>
-        <script src="/frontend/util/JS_SCRIPTS/handleClick_SwitchPg.js" type="text/javascript" charset="utf-8"></script>
-  <script type="module">
+<script src="/frontend/util/JS_SCRIPTS/handleClick_SwitchPg.js" type="text/javascript" charset="utf-8"></script>
+<script type="module">
     import { initNotchNav } from '/frontend/util/JS_SCRIPTS/linkTracker.js';
     initNotchNav('.notchNavBar');
   </script>
 </body>
 </html>
-</body>
-</html>
+
+<!--    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+-->
+
+```

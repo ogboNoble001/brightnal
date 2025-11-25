@@ -4,6 +4,9 @@
                 { "source": "/explore", "destination": "/frontend/explore/explore.html" },
                 {
                   "source": "/search", "destination": "/frontend/search/search.html"
+                },
+              {
+                  "source": "/bookmark", "destination": "/frontend/bookmark/bookmark.html"
                 }
         ]
 }
