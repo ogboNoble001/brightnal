@@ -1,3 +1,77 @@
+:root {
+            --primary-color: #000000;
+            --secondary-color: #E9E9E9;
+            --text-muted-color: #555555;
+            --bold-font-weight: 700;
+            --regular-font-weight: 400;
+            --light-font-weight: 300;
+            --font-family-base: 'Cabinet Grotesk', sans-serif;
+            --font-family-alt: 'Noto Sans', sans-serif;
+        }
+
+        *, *::after, *::before, button {
+            font-family: 'Cabinet Grotesk', sans-serif !important;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+            width: 0px;
+        }
+
+        body {
+            position: relative;
+            font-family: 'Cabinet Grotesk', sans-serif !important;
+            color: #000000;
+            line-height: 1.6;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .flex-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .notAligned {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .text-muted {
+            color: #555555;
+        }
+
+        .diff1 { gap: .3em; }
+        .diff2 { gap: 1em; }
+        .diff3 { gap: 2em; }
+        .diff4 { width: 100%; }
+
+        .jc-c { display: flex; justify-content: center; }
+        .ai-bl { align-items: baseline; }
+        .ai-c { display: flex; align-items: center; }
+        .ai-fs { align-items: flex-start; }
+        .jc-sb { display: flex; justify-content: space-between; }
+        .jc-fs { justify-content: flex-start; }
+        .m-r { margin-right: auto; }
+        .m-t { margin-top: .15em; }
+        .noShaking { display: flex; flex: 0 0 auto; }
+
+        .Icn {
+            cursor: pointer;
+            min-width: 1em;
+            min-height: 1em;
+        }
 .notchNavBar {
     position: fixed;
     bottom: 1.5em;
