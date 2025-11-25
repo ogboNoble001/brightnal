@@ -169,7 +169,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
-    padding: 1em 3em;
+    padding: .7em 3em;
     background: rgba(255, 255, 255, 0.7);
     color: #000;
     border-radius: 20px;
@@ -184,11 +184,33 @@
     color: #BDBEBD;
 }
 .notchNavBar span.active{
+    transition: all .4s ease;
     color: #000000;
+}
+.notchNavBar *:not(:has(span.active)) svg {
+    stroke: grey;
 }
 .notchNavBar *:has(span.active){
     margin-bottom: .27rem;
 }
 .transform-m-e{
     transform: rotate(90deg);
+}
+.notchNavBar .notAligned {
+  position: relative;
+}
+
+.notchNavBar .notAligned .indicator {
+  position: absolute;
+  top: 0;
+  left: 1em;
+  width: 5px;
+  height: 5px;
+  background: red;
+  border-radius: 50%;
+  display: none;
+}
+
+.notchNavBar .notAligned.has-indicator .indicator {
+  display: block;
 }
