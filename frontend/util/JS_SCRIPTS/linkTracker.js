@@ -30,15 +30,17 @@ export function initNotchNav(navSelector) {
     
 
     window.addEventListener('popstate', () => {
-        const newPath = window.location.pathname.split('/').filter(Boolean).pop() || 'explore';
-        const newActiveItem = Array.from(navItems).find(item => 
-            item.getAttribute('data-url') === newPath
-        );
-        
-        if (newActiveItem) {
-            setActive(newActiveItem, navItems);
-        }
-    });
+    const newPath = window.location.pathname.split('/').filter(Boolean).pop() || 'explore';
+    const newActiveItem = Array.from(navItems).find(item =>
+        item.getAttribute('data-url') === newPath
+    );
+    
+    if (newActiveItem) {
+        setActive(newActiveItem, navItems);
+    }
+    
+    window.location.href = window.location.pathname;
+});
     
     function setActive(activeItem, allItems) {
 
