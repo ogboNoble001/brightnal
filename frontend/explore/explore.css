@@ -1,0 +1,165 @@
+:root {
+            --primary-color: #000000;
+            --secondary-color: #E9E9E9;
+            --text-muted-color: #555555;
+            --bold-font-weight: 700;
+            --regular-font-weight: 400;
+            --light-font-weight: 300;
+            --font-family-base: 'Cabinet Grotesk', sans-serif;
+            --font-family-alt: 'Noto Sans', sans-serif;
+        }
+
+        *, *::after, *::before, button {
+            font-family: 'Cabinet Grotesk', sans-serif !important;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+            width: 0px;
+        }
+
+        body {
+            position: relative;
+            font-family: 'Cabinet Grotesk', sans-serif !important;
+            color: #000000;
+            line-height: 1.6;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .flex-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .notAligned {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .text-muted {
+            color: #555555;
+        }
+
+        .diff1 { gap: .3em; }
+        .diff2 { gap: 1em; }
+        .diff3 { gap: 2em; }
+        .diff4 { width: 100%; }
+
+        .jc-c { display: flex; justify-content: center; }
+        .ai-bl { align-items: baseline; }
+        .ai-c { display: flex; align-items: center; }
+        .ai-fs { align-items: flex-start; }
+        .jc-sb { display: flex; justify-content: space-between; }
+        .jc-fs { justify-content: flex-start; }
+        .m-r { margin-right: auto; }
+        .m-t { margin-top: .15em; }
+        .noShaking { display: flex; flex: 0 0 auto; }
+
+        .Icn {
+            cursor: pointer;
+            min-width: 1em;
+            min-height: 1em;
+        }
+
+        #foryou {
+            padding: 20px;
+        }
+
+        #masonry {
+            column-count: 2;
+            column-gap: 14px;
+        }
+
+        .card {
+            width: 100%;
+            margin-bottom: 14px;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .card.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .media-wrap {
+            width: 100%;
+            display: block;
+        }
+
+        img.media {
+            width: 100%;
+            display: block;
+            border-radius: 16px;
+            background: #ddd;
+        }
+
+        .color-tile {
+            width: 100%;
+            border-radius: 16px;
+        }
+
+        @media (min-width: 700px) {
+            #masonry {
+                column-count: 3;
+            }
+        }
+
+        @media (min-width: 1050px) {
+            #masonry {
+                column-count: 4;
+            }
+        }
+
+        /* Skeleton Loading */
+        #skeletonMasonry {
+            padding: 20px;
+            column-count: 2;
+            column-gap: 14px;
+        }
+
+        @media (min-width: 700px) {
+            #skeletonMasonry {
+                column-count: 3;
+            }
+        }
+
+        @media (min-width: 1050px) {
+            #skeletonMasonry {
+                column-count: 4;
+            }
+        }
+
+        .card.skeleton {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 14px;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            height: 300px;
+            opacity: 1;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }

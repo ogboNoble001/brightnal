@@ -1,4 +1,10 @@
 window.onload = () => {
+  const exploreBtn= document.querySelector('.exploreBtn')
+  if (exploreBtn) {
+    exploreBtn.addEventListener('click', ()=>{
+      window.location.href='/frontend/explore/explore.html'
+    })
+  }
   if (typeof AOS !== "undefined") {
     AOS.init({
       offset: 200,

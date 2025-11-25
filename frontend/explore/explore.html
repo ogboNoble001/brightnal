@@ -1,14 +1,28 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brightnal's Concepts</title>
+    <link rel="stylesheet" href="./explore.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/cabinet-grotesk" rel="stylesheet">
 </head>
-
 <body>
-        
-</body>
+<div id="skeletonMasonry"></div>
+<section id="foryou" style="display: none;">
+    <div id="masonry"></div>
+</section>
 
+<template id="cardTpl">
+    <div class="card">
+        <div class="media-wrap">
+            <img class="media">
+        </div>
+    </div>
+</template>
+<script src="./explore.js" type="text/javascript" charset="utf-8"></script>
+</body>
 </html>
