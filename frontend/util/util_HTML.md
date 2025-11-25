@@ -34,10 +34,6 @@
     </div>
     </nav>
 <script src="/frontend/util/JS_SCRIPTS/handleClick_SwitchPg.js" type="text/javascript" charset="utf-8"></script>
-<script type="module">
-    import { initNotchNav } from '/frontend/util/JS_SCRIPTS/linkTracker.js';
-    initNotchNav('.notchNavBar');
-  </script>
 </body>
 </html>
 
