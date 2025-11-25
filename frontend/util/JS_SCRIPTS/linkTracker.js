@@ -1,24 +1,44 @@
 export function initNotchNav(navSelector) {
     const navItems = document.querySelectorAll(`${navSelector} > div[data-url]`);
     
-    // Find initially active item from HTML (has span.active)
-    const initialActive = Array.from(navItems).find(item =>
-        item.querySelector('span.active')
+    // Get the current path segment (e.g., "explore" from "/explore")
+    const currentPath = window.location.pathname.split('/').filter(Boolean).pop() || 'explore';
+    
+    // Find the nav item that matches the current path
+    const activeItem = Array.from(navItems).find(item => 
+        item.getAttribute('data-url') === currentPath
     );
     
-    if (initialActive) {
-        setActive(initialActive, navItems);
+    // Set initial active state based on URL
+    if (activeItem) {
+        setActive(activeItem, navItems);
     }
     
+    // Add click handlers for navigation
     navItems.forEach((item) => {
         item.addEventListener('click', () => {
             const url = item.getAttribute('data-url');
             
-            // Handle navigation here (e.g., update URL, load content, etc.)
-            console.log(`Navigating to: ${url}`);
+            // Navigate to the new URL
+            window.history.pushState({}, '', `/${url}`);
             
             setActive(item, navItems);
+            
+            // Optionally dispatch a custom event for other parts of your app to listen to
+            window.dispatchEvent(new CustomEvent('navigationChange', { detail: { url } }));
         });
+    });
+    
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', () => {
+        const newPath = window.location.pathname.split('/').filter(Boolean).pop() || 'explore';
+        const newActiveItem = Array.from(navItems).find(item => 
+            item.getAttribute('data-url') === newPath
+        );
+        
+        if (newActiveItem) {
+            setActive(newActiveItem, navItems);
+        }
     });
     
     function setActive(activeItem, allItems) {
