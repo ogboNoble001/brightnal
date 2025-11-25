@@ -26,11 +26,11 @@
 body {
     position: relative;
     font-family: 'Cabinet Grotesk', sans-serif !important;
-    background-color: #F5F7FA;
+    background-color: #151518;
     color: #000000;
     line-height: 1.6;
     width: 100%;
-    background: #000;
+    
     overflow-x: hidden;
 }
 
@@ -170,7 +170,7 @@ body {
 
 
 .btn-primary {
-    background: #B71C1C;
+    background: #1B1B1F;
     color: #fff;
     border: none;
     padding: 16px 24px;
