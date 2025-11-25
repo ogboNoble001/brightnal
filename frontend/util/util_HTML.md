@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brightnal's Concepts</title>
+          <script type="module">
+      import { initNotchNav } from '/frontend/util/JS_SCRIPTS/linkTracker.js';
+      initNotchNav('.notchNavBar');
+  </script>
     <link rel="shortcut icon" type="image/x-icon" href="/frontend/res/file_00000000d5b47246a67fb09c50189192.png">
     <link rel="stylesheet" href="/frontend/util/CSS_STYLESHEETS/util_main.css">
 </head>
