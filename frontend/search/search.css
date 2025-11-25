@@ -99,9 +99,7 @@
 .notchNavBar *:not(:has(span.active)) svg {
     stroke: grey;
 }
-.notchNavBar *:has(span.active){
-    margin-bottom: .27rem;
-}
+
 .transform-m-e{
     transform: rotate(90deg);
 }
