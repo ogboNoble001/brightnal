@@ -1,780 +1,108 @@
-# brightnal
-BrightNal's Concepts 
-.everything{
-    padding: 1.5em 4em;
-}
-.overlay{
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgb(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px) saturate(180%) contrast(75%) sepia(30%);
-    z-index: 1000;
-}
-.nav-profileImg{
-    margin-left: .8em;
-}
-.navigation-home{
-    position: sticky;
-    padding: 1em 4em;
-    z-index: 1999;
-    top: 0;
-    
-    background-color: #F5F7FA;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+# Brightnal's Concepts — README (Search Page & Notch Navigation)
 
-}
-.logo{
-    width: 25px;
-    height: 25px;
-    transform: scale(1.9);
-    margin: .06em 0 0 .14em;
-}
-.mainNav{
-    display: flex;
-    align-items: center;
-    gap: 4em;
-    font-weight: 300;
-}
-.mainNav a{
-    text-decoration: none;
-    color: #000000;
-    align-items: baseline;
-    font-weight: var(--regular-font-weight);
-    font-size: .9em;
-    white-space: nowrap;
-}
+## Overview
+This README explains the **Search Page** and its **Notch Navigation Bar system** in Brightnal’s Concepts. The navigation bar is designed to mimic a curved-bottom iPhone tab bar. Each navigation item uses a `data-url` attribute to switch pages dynamically via JavaScript.
 
-.headerCallToAction{
-    
-}
+This page uses **HTML**, **CSS**, **JavaScript**, modular scripts, and inline SVG icons. It also includes custom fonts for a clean, modern aesthetic.
 
-.headerCallToAction .Icn {
-    width: 1em;
-    height: 1em;
-}
+---
 
-.nav-search-searchedProducts{
-    flex-wrap: wrap;
-    width: 100%;
-    overflow-x: scroll !important;
-    
-}
-.search-bar-parent{
-    min-width: 300px !important;
-    max-width: 400px;
-    flex-direction: row-reverse !important;
-    background-color: #ffffff;
-    border-radius: 20px;
-    padding: .6em .6em .4em .4em;
-    width: 100%;
-}
+## Features
+### ✅ Notch Navigation Bar
+- Located at the bottom of the page (`<nav class="notchNavBar">`).
+- Four items with `data-url` attributes:
+  - **Explore** (`data-url="explore"`)
+  - **Search** (`data-url="search"`)
+  - **Bookmark** (`data-url="bookmark"`)
+  - **Me** (`data-url="me"`)
+- Each item includes an **SVG icon** and a `<span>` label.
+- The active item is highlighted by default.
+- The `Me` tab also includes an indicator element for notifications.
 
-.search-bar-parent .search-bar{
-    width: 90%;
-}
+### ✅ Page Switching
+- Clicking any item triggers your script to read its `data-url` and update the page accordingly.
+- JS scripts involved:
+  - `/frontend/search/search.js`
+  - `/frontend/util/JS_SCRIPTS/handleClick_SwitchPg.js`
+  - `/frontend/util/JS_SCRIPTS/linkTracker.js`
+- `initNotchNav('.notchNavBar')` initializes event listeners and handles active states.
 
-.search-bar-parent .search-bar input{
-    width: 100%;
-    border: none;
-    outline: none;
-    font-size: .9em;
-    font-size: smaller;
-    font-weight: var(--light-font-weight);
-    color: var(--text-muted-color);
-}
-.drop-down-scrollPrnt{
-    width: 100%;
-    overflow-x: hidden;
-}
-.drop-down-parent{
-    width: 15%;
-    min-width: 150px;
-    background-color: #ffffff;
-    border-radius: 20px;
-    padding: .4em .6em .4em .8em;
-}
+### ✅ Custom Fonts
+- **Noto Sans** via Google Fonts
+- **Cabinet Grotesk** via CDNFonts
 
-.drop-down-parent .drop-down-current-text{
-    font-size: .9em;
-    font-size: smaller;
-    font-weight: var(--light-font-weight);
-    color: #000000;
-}
+### ✅ Clean Asset Structure
+CSS is located at:
+```
+/frontend/search/search.css
+```
+Icons are inline SVGs using Lucide icon format.
 
-.drop-down-parent .Icn {
-    flex: 0 0 auto;
-    width: 1em;
-    height: 1em;
-    border-radius: 50%;
-    background-color: #F2F2F2;
-}
+---
 
-.trendingAndSearched-parent{
-    display: flex;
-    overflow-x: scroll !important;
-    justify-content: flex-start;
-}
+## File Structure
+```
+project-root/
+│
+├── frontend/
+│   ├── search/
+│   │   ├── search.css
+│   │   └── search.js
+│   │
+│   ├── util/
+│   │   └── JS_SCRIPTS/
+│   │       ├── handleClick_SwitchPg.js
+│   │       └── linkTracker.js
+│   │
+│   └── res/
+│       └── file_00000000d5b47246a67fb09c50189192.png
+│
+└── search.html (This file)
+```
 
-.trendingAndSearched{
-    font-size: small;
-    font-weight: var(--regular-font-weight);
-    background-color: #ffffff;
-    flex: 0 0 auto;
-    border-radius: 20px;
-    padding: .4em .7em;
-}
+---
 
-section.mainSection{
-    margin-left: auto;
-    margin-right: auto;
-    flex-wrap: wrap;
-    width: 100%;
-    height: fit-content;
-    gap: 1.5em;
-}
+## How Navigation Works
+1. **Click Detection**
+   - Each `<div>` inside `.notchNavBar` has a `data-url` attribute.
+   - JS reads the value on click.
 
-section.mainSection section.mainSection-main{
-    position: relative;
-    height: fit-content;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 1.5em;
-    padding: .4em .6em;
-    background-color: #ffffff;
-    border-radius: 32px;
-    font-size: clamp(1.8rem, 4vw, 2.9rem);
-    font-weight: var(--bold-font-weight);
-    width: calc(50% - 0.75em);
-    min-width: 320px;
-    flex: 1 1 45%;
-}
-section.mainSection-main div.mainSection-main-text {
-    width: auto;
-    letter-spacing: -.01em;
-    word-spacing: -.01em;
-    line-height: 1.2;
-}
+2. **Active State Handling**
+   - Removes the `active` class from other items.
+   - Adds `active` to the clicked item.
+   - Updates SVG stroke color if needed.
 
-section.mainSection-main div.mainSection-main-text .masked-word{
-  font-weight: 900;
-  background: url('/frontend/res/newPro.avif') center/cover;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
+3. **Page Switching**
+   - `handleClick_SwitchPg.js` uses `data-url` values to load the appropriate page or section.
 
+---
 
-section.mainSection-main div.mainSection-main-tagline {
-    margin-bottom: 1em;
-    margin: 0 auto;
-    max-width: 230px;
-    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-    font-weight: var(--regular-font-weight);
-    color: var(--text-muted-color);
-    line-height: 1.5;
-}
+## How to Modify
+- **Add a new tab:** Duplicate a nav item and update `data-url`.
+- **Change icons:** Replace inline SVG paths.
+- **Change fonts:** Update `<link>` tags in `<head>`.
+- **Change styling:** Edit `/frontend/search/search.css`.
 
-section.mainSection-main div.mainSection-main-cta {
-    margin-top: -.5em;
-}
+---
 
-section.mainSection-main div.mainSection-main-cta div.cta-button {
-    position: relative;
-    width: fit-content;
-    font-size: clamp(0.85rem, 1.8vw, 1rem);
-    font-weight: var(--regular-font-weight);
-    padding: .5em 1.6em;
-    border-radius: 32px;
-    background-color: #000000;
-    color: #ffffff;
-    cursor: pointer;
-}
+## Hosting
+The page works on any static hosting platform:
+- Render
+- Cloudflare Pages
+- Netlify
+- Vercel
 
-section.mainSection-main div.mainSection-main-cta div.cta-button::after{
-    position: absolute;
-    right: -6px;
-    background-color: #000000;   
-    content: '';
-    display: block;
-    width: 12px;
-    height: 8px;
-}
+Upload the entire `frontend` folder and the HTML file.
 
-section.mainSection div.mainSection-main-cta div.cta-button::before{
-    position: absolute;
-    right: -35px;
-    border-radius: 50%;
-    width: 30px;
-    flex: 0 0 auto;
-    height: 30px;
-    background-color: #000000;
-    content: '';
-    display: block;
-}
+---
 
-.lucide-arrow-down-right-icon{
-    position: absolute;
-    right: -16px;
-}
+## Credits
+- Navigation UI: **Brightnal**
+- Icons: **Lucide**
+- Fonts: **Google Fonts** & **CDNFonts**
 
-section.mainSection .mainSection-main-clientReviews{
-    margin-top: -1em;
-    font-size: clamp(0.85rem, 1.5vw, 1rem);
-    font-weight: var(--regular-font-weight);
-    color: var(--text-muted-color);
-    flex-wrap: wrap;
-    gap: 1em;
-}
+---
 
-section.mainSection .mainSection-main-clientReviews .reviewText{
-    font-weight: var(--bold-font-weight);
-    color: var(--text-muted-color);
-}
-
-section.mainSection .mainSection-main-clientReviews .reviewSubText{
-    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
-    color: #000000;
-}
-
-.clientProfiles{
-    display: flex;
-}
-
-.profileImg{
-    font-family: "Cabinet Grotesk", sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 2.5em;
-    font-weight: var(--bold-font-weight);
-    height: 2.5em;
-    border-radius: 50%;
-    color: #ffffff;
-    margin-left: -.6em;
-    border: 4px solid #ffffff;
-}
-
-.clientProfiles .profileImg:first-child {
-    margin-left: 0; 
-}
-
-section.mainSection section.mainSection-Img_Video-Prnt{
-    position: relative;
-    width: calc(50% - 0.75em);
-    min-width: 320px;
-    display: flex;
-    flex: 1 1 45%;
-    border-radius: 32px;
-    overflow: hidden;
-    background-color: #ffffff;
-}
-
-section.mainSection section.mainSection-Img_Video-Prnt .mainSection-Img_Video-Media{
-    width: 50%;
-    height: 340px;
-    position: relative;
-    object-fit: cover;
-    padding: 4em 2em;
-    display: flex;
-    z-index: 8;
-}
-section.mainSection section.mainSection-Img_Video-Prnt .mainSection-Img_Video-Media::before {
-    content: '';
-    position: absolute;
-    
-    background-color: var(--secondary-color);
-    opacity: .5;
-    width: 150px;
-    max-width: 340px;
-    z-index: -1;
-    height: 65%;
-    border-radius: 64px 64px 0 0;
-}
-/*
-section.mainSection section.mainSection-Img_Video-Prnt .mainSection-Img_Video-Media::after {
-    content: '';
-    position: absolute;
-    margin-top: 3em;
-    opacity: .5;
-    width: 150px;
-    max-width: 340px;
-    z-index: 1;
-    height: 45%;
-    transform: rotate(180deg);
-    background: url("/frontend/res/file_000000009e1872438c7f4cb1760e2f4c.png") center/cover;
-    border-radius: 64px 64px 0 0; 
-    opacity: .7;
-}*/
-section.mainSection-Img_Video-Prnt .mainSection-Img_Video-Media img{
-    height: 90%;
-    margin-left: .57em;
-    transition: all ease-in-out .2s;
-    transform: scale(1.5);
-}
-.animateTxt span {
-    display: inline-block;
-    opacity: 0;
-    animation: 
-    text-focus-in 1s ease forwards,
-    scale-in-tl 0.5s ease forwards;
-}
-.mainSection-overlayText{
-    
-    flex: 0 0 auto;
-    font-weight: var(light-font-weight);
-    color: var(--text-muted-color);
-    font-size: medium;
-    margin-right: 1em;
-    letter-spacing: .3em;
-    padding-bottom: 10vh;
-    text-transform: uppercase;
-}
-.animateRevealText span{
-    display: inline-block;
-      transform: translateY(20px);
-      opacity: 0;
-}
-.otherElem{
-    letter-spacing: initial;
-    font-weight: var(--bold-font-weight);
-    letter-spacing: .2em;
-    font-size: xx-small;
-}
-.status{
-    background-color: red;
-    font-size: xx-small;
-    color: #006D4C;
-    background-color: #DFFEED;
-    font-weight: var(--bold-font-weight);
-    padding: .3em;
-}
-footer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2em;
-    
-    background-color: #F4F4F4;
-    padding: 3em 2em;
-    line-height: 1.5;
-    font-size: small;
-    letter-spacing: .07em;
-}
-.footer-div{
-    
-}
-.hamburger {
-    display: block;
-    width: 30px;
-    height: 25px;
-    cursor: pointer;
-    position: relative;
-    z-index: 1001;
-}
-
-.hamburger span {
-    display: block;
-    width: 100%;
-    height: 3px;
-    background-color: #333;
-    margin-bottom: 5px;
-    transition: all 0.3s ease;
-}
-
-.hamburger span:last-child {
-    margin-bottom: 0;
-}
-
-.mainOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    z-index: 999;
-}
-
-.mainOverlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.sidebar {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 280px;
-  height: auto; 
-  max-height: 90vh;
-  overflow-y: auto;
-  background: #fff;
-  border: 1px solid #e5e5e0;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0.9);
-  transition: 
-      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-      opacity 0.3s ease;
-  z-index: 9999;
-}
-.sidebar.active {
-  opacity: 1;
-  pointer-events: all;
-  transform: translate(-50%, -50%) scale(1.1);
-}
-.sidebar-header {
-  padding: 1.5rem 1.5rem 1rem;
-  border-bottom: 1px solid #e5e5e0;
-  background-color: #fefefe;
-}
-
-.sidebar-title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: #000;
-}
-
-.sidebar-subtitle {
-  display: flex;
-  flex-direction: column;
-  gap: .2em;
-  font-size: 0.85rem;
-  color: #536471;
-}
-
-.sidebar-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  color: #536471;
-  font-size: 1.3rem;
-  cursor: pointer;
-  padding: 0.4rem;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-}
-
-.sidebar-close:hover {
-  background-color: #f7f9fa;
-  color: #0f1419;
-}
-
-.sidebar-menu {
-  padding: 0.5rem 0;
-}
-
-.menu-section {
-  margin-bottom: 1rem;
-  height: 100%;
-  background-color: #f7f9fa;
-}
-
-.menu-section-title {
-  padding: 0.5rem 1.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #536471;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  position: relative;
-  padding: 0.75rem 1.5rem;
-  font-size: 0.95rem;
-  color: #536471;
-  text-decoration: none;
-  
-  
-}
-.menu-item.active {
-  font-weight: 500;
-  background-color: #f7f9fa;
-  color: #0f1419;
-}
-
-.menu-item.active .menu-icon {
-  color: #0f1419;
-}
-
-.menu-item.active::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 4px;
-  height: 95%;
-  background-color: #0f1419;
-  border-radius: 0 12px 12px 0;
-  transition: none; 
-}
-.menu-icon {
-  margin-right: 0.75rem;
-  width: 18px;
-  height: 18px;
-  color: inherit;
-}
-
-.privPrnt{
-    
-    margin-left: 1.5em ;
-}
-a{
-    text-decoration: none;
-    color: unset;
-}
-.header-text{
-    font-size: medium;
-}
-.showCaseProducts-header{
-    padding: .3em 2em;
-    text-align: center;
-    background: linear-gradient(
-    to bottom,
-    rgba(253, 249, 211, 0) 0%,  
-    rgba(253, 249, 211, 0.3) 20%,  
-    rgba(253, 249, 211, 0.55) 40%,
-    rgba(253, 249, 211, 0.8) 50%,
-    rgba(253, 249, 211, 0.55) 60%,
-    rgba(253, 249, 211, 0.3) 80%,    
-    rgba(253, 249, 211, 0) 100%
-);
-}
-.showCaseProducts-header h2{
-    font-size: larger;
-}
-.seeMoreTab{
-    font-family: inherit;
-    position: absolute;
-    flex: 0 0 auto;
-    right: 2em;
-    top: 1em;
-}
-.resetStyle{
-    padding: .4em;
-    margin: 0;
-}
-.imageTable {
-    width: 100%;
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-gap: 2rem;
-
-padding: 2rem 1rem;
-}
-.imgPrnt{
-    position: relative;
-height: 320px;
-background-color: transparent;
-cursor: pointer;
-transition: transform 0.3s ease;
-}
-.imgPrnt-img{
-    height: 350px;
-    position: absolute;
-    
-}
-.imgPrnt-bg{
-position: absolute;
-top: 2.5em;
-left: 1em;
-background-color: #5481D9;
-opacity: .1;
-height: 180px;
-width: 120px;
-z-index: -1;
-border-radius: 64px 64px 0 0;
-}
-
-.showCaseProducts {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-
-.displayOptionBox{
-   position : absolute;
-    background-color: red;
-    width: 100px;
-    height : 60px;
-    display:none;
-    flex-direction:column;
-    border-radius: 12px;
-    align-items:flex-start;
-    justify-content: flex-start;
-    gap: .43em;
-        }
-        
-
-      .premiumBtn {
-    position: relative;
-    background: #F8F8FC;
-    border: none;
-    padding: 6px ;
-    padding: .4rem .8rem;
-    border-radius: 50px;
-    margin-left: .2em !important;
-    font-weight: bold;
-    color: #000;
-    font-family: var(--font-family-base), sans-serif;
-    
-    cursor: pointer;
-}
-@property --angle{
-    syntax: "<angle>";
-    initial-value: 0deg;
-    inherits: false;
-}
-.premiumBtn::after,
-.premiumBtn::before {
-    content: "";
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-    z-index: -1;
-    padding: .85rem 2rem;
-    border-radius: 50px;
-    background-image: conic-gradient( from var(--angle), transparent, #006aff, #ff00a5, #ff4545);
-    animation: 4s spin linear infinite;
-}
-.premiumBtn::before{
-    filter: blur(.2em);
-    opacity: .5;
-}
-@keyframes spin{
-    from{
-        --angle: 0deg;
-    }
-    to{
-        --angle: 360deg;
-    }
-}
-/*
-.premiumBtn .shine {
-  position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.6) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: skewX(-20deg);
-  animation: shimmer 2.5s infinite;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.premiumBtn > *:not(.shine) {
-  position: relative;
-  z-index: 2;
-}
-
-@keyframes shimmer {
-  0% {
-    left: -75%;
-  }
-  100% {
-    left: 125%;
-  }
-} */
-        .masonry {
-            
-            column-count: 4;
-            column-gap: 15px;
-        }
-
-        .masonry img {
-            width: 100%;
-            display: block;
-            margin-bottom: 15px;
-            border-radius: 8px;
-        }
-
-        /* Responsive adjustments to keep masonry visible */
-        @media (max-width: 1200px) {
-            .masonry {
-                column-count: 3;
-            }
-        }
-
-        @media (max-width: 800px) {
-            .masonry {
-                column-count: 2;
-            }
-        }
-
-        @media (max-width: 500px) {
-            .masonry {
-                column-count: 2; /* Keep 2 columns on small screens */
-            }
-        }
-.masonry img,
-.masonry video {
-    view-timeline-name: --item-timeline;
-animation: slide-fade-in both;
-animation-timeline: --item-timeline;
-animation-range: cover 0% contain 50%;
-    width: 100%;
-    display: block;
-    margin-bottom: 1em;
-    border-radius: 8px;
-    object-fit: cover;
-}
-@keyframes slide-fade-in {
-  0% {
-      
-    -webkit-transform: scale(.5);
-            transform: scale(.5);
-    opacity: 0;
-  }
-  100% {
-      
-    -webkit-transform: scale(1);
-            transform: scale(1);
-    opacity: 1;
-  }
-}
-.CTA-section {
-
-    width: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    position: relative;
-}
-
-.CTA-section {
-    height: 100%;
-    width: 100%;
-    position: relative;
-}
+## License
+This navigation system is free for personal or commercial use unless otherwise stated.
 
