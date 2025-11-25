@@ -2,7 +2,7 @@ window.onload = () => {
   const exploreBtn= document.querySelector('.exploreBtn')
   if (exploreBtn) {
     exploreBtn.addEventListener('click', ()=>{
-      window.location.href='/frontend/explore/explore.html'
+      window.location.href='./explore'
     })
   }
   if (typeof AOS !== "undefined") {
