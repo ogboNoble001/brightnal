@@ -1,7 +1,7 @@
 export function initNotchNav(navSelector) {
     const navItems = document.querySelectorAll(`${navSelector} > div[data-url]`);
     
-    const currentPath = window.location.pathname.split('/').filter(Boolean).pop();
+    const currentPath = window.location.pathname.split('/').filter(Boolean).pop() || 'explore';
     
 
     const activeItem = Array.from(navItems).find(item => 
