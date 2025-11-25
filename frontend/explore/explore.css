@@ -163,3 +163,20 @@
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
+.notchNavBar {
+    position: fixed;
+    bottom: 1.5em;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    padding: 1em 3em;
+    background: rgba(255, 255, 255, 0.4);
+    color: #000;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px); 
+    -webkit-backdrop-filter: blur(15px); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    
+}

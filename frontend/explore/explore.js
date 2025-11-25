@@ -35,11 +35,21 @@ function createColorCard(color, height) {
     return card;
 }
 
-function createImageCard(src) {
+function createImageCard(src, fallbackColors) {
     const card = tpl.content.cloneNode(true).querySelector('.card');
     const img = card.querySelector('img.media');
     img.dataset.src = src;
-    img.alt = 'Gallery Image';
+    img.onerror = () => {
+        const wrap = card.querySelector('.media-wrap');
+        wrap.innerHTML = '';
+        const fallback = fallbackColors[Math.floor(Math.random() * fallbackColors.length)];
+        const div = document.createElement('div');
+        div.className = 'color-tile';
+        div.style.background = fallback.color;
+        div.style.height = (fallback.h || 260) + 'px';
+        wrap.appendChild(div);
+        card.classList.add('loaded');
+    };
     return card;
 }
 
@@ -69,9 +79,10 @@ for (let i = 0; i < items.length; i++) {
 setTimeout(() => {
     skeletonMasonry.style.display = 'none';
     mainContent.style.display = 'block';
+    const colorItems = items.filter(item => item.type === 'color');
     items.forEach((item, index) => {
         let card;
-        if (item.type === 'img') card = createImageCard(item.src);
+        if (item.type === 'img') card = createImageCard(item.src, colorItems);
         else card = createColorCard(item.color, item.h);
         masonry.appendChild(card);
         fadeInCard(card, index * 100);
