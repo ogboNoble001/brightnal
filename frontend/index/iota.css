@@ -77,8 +77,9 @@ body {
 
 /* Masonry Grid */
 .masonry-container {
+    padding-top: 1.3em ;
     column-count: 2;
-    column-gap: 8px;
+    column-gap: 10px;
 }
 
 .masonry-item {
