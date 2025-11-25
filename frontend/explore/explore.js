@@ -50,12 +50,12 @@ function createImageCard(item) {
     img.dataset.src = item.src;
     
     img.onload = () => {
-        // Hide color placeholder when image loads
+        
         colorDiv.style.display = 'none';
     };
     
     img.onerror = () => {
-        // Keep showing color placeholder if image fails
+
         img.style.display = 'none';
         card.classList.add('loaded');
     };
@@ -104,7 +104,6 @@ if (addNotify) {
     const meItem = document.querySelector('.notAligned.flex-col:last-child');
     meItem.classList.add('has-indicator');
 }
-
 setTimeout(() => {
     skeletonMasonry.style.display = 'none';
     mainContent.style.display = 'block';

@@ -168,7 +168,7 @@
     bottom: 1.5em;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
+    width: 95%;
     padding: .7em 3em;
     background: rgba(255, 255, 255, 0.7);
     color: #000;
@@ -181,7 +181,7 @@
     
 }
 .notchNavBar span{
-    color: #BDBEBD;
+    color: grey;
 }
 .notchNavBar span.active{
     transition: all .4s ease;
@@ -190,7 +190,7 @@
 .notchNavBar *:not(:has(span.active)) svg {
     stroke: grey;
 }
-.notchNavBar *:has(span.active){
+.notchNavBar *:has(span.explore){
     margin-bottom: .27rem;
 }
 .transform-m-e{

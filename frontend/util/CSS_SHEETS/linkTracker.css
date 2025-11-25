@@ -1,0 +1,7 @@
+.notchNavBar span.active {
+    transition: all 0.4s ease;
+    color: #000;
+}
+.notchNavBar *:not(:has(span.active)) svg {
+    stroke: grey;
+}
