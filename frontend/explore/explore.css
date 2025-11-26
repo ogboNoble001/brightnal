@@ -158,9 +158,7 @@
     display: block;
 }
 .text-header{
-    
     font-optical-sizing: auto;
     margin-left: .8em;
     font-family: var(--font-family-price) !important;
-    color: var(--text-muted-color);
 }
