@@ -18,7 +18,7 @@ const items = [
     { type: 'img', src: '/frontend/res/cbacc77b0a1343c3b0aa3a7a6eaa6163.jpg', color: '#b99268', h: 360 },
     { type: 'img', src: '/frontend/res/2a01626af3fa4e788eddfba0fb65f378.jpg', color: '#e6d7ce', h: 300 }
 ];
-
+const overlay = document.querySelector('.overlay-div') 
 const masonry = document.getElementById('masonry');
 const tpl = document.getElementById('cardTpl');
 const mainContent = document.getElementById('foryou');
@@ -27,6 +27,10 @@ const skeletonMasonry = document.getElementById('skeletonMasonry');
 function createSkeletonCard() {
     const card = document.createElement('div');
     card.className = 'card skeleton';
+    
+    const randomHeight = Math.floor(Math.random() * 350) + 150;
+    card.style.setProperty('--sk-height', randomHeight + 'px');
+    
     return card;
 }
 
@@ -35,30 +39,37 @@ function createImageCard(item) {
     const wrap = card.querySelector('.media-wrap');
     const img = card.querySelector('img.media');
     
-    // Create color placeholder
     const colorDiv = document.createElement('div');
     colorDiv.className = 'color-tile';
     colorDiv.style.background = item.color;
     colorDiv.style.height = (item.h || 260) + 'px';
     colorDiv.style.position = 'absolute';
-    colorDiv.style.top = '0';
-    colorDiv.style.left = '0';
-    colorDiv.style.width = '100%';
     wrap.insertBefore(colorDiv, img);
     
-    // Set up image loading
     img.dataset.src = item.src;
     
     img.onload = () => {
-        
         colorDiv.style.display = 'none';
     };
     
     img.onerror = () => {
-
         img.style.display = 'none';
         card.classList.add('loaded');
     };
+    
+    card.addEventListener('click', () => {
+    overlay.classList.add('active');
+    overlay.innerHTML = `
+        <div class="back-btn"></div>
+        <div class="image-wrapper">
+        <img src='${item.src}' />
+</div>
+
+    `;
+    overlay.querySelector('.back-btn').addEventListener('click', ()=>{
+          overlay.classList.remove('active')
+      })
+});
     
     return card;
 }
@@ -115,4 +126,4 @@ setTimeout(() => {
     });
     
     initLazyLoading();
-}, 4000);
+}, 1000);
