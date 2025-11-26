@@ -113,16 +113,19 @@
 }
 
 .back-btn {
-    z-index: 5555;
     position: absolute;
     top: 1em;
-    border-radius: 12px;
     left: 1em;
-    background-color: #ffffff;
     width: 45px;
-    box-shadow: 0 6px 25px rgba(0,0,0,0.12);
     height: 45px;
+    padding: 10px;
+    background-color: #141115;
+    color: red;
+    border-radius: 12px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+    cursor: pointer;
 }
+
 .image-wrapper{
     width: 100%;
     max-width: 380px;
