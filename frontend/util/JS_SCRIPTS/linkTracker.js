@@ -9,7 +9,9 @@ export function initNotchNav(navSelector) {
     );
     
 
-    
+    if (activeItem) {
+        setActive(activeItem, navItems);
+    }
     
 
     navItems.forEach((item) => {
