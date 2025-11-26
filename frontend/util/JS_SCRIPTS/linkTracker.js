@@ -3,16 +3,9 @@ export function initNotchNav(navSelector) {
     
     const currentPath = window.location.pathname.split('/').filter(Boolean).pop() || 'explore';
     
-
     const activeItem = Array.from(navItems).find(item => 
         item.getAttribute('data-url') === currentPath
     );
-    
-
-    if (activeItem) {
-        setActive(activeItem, navItems);
-    }
-    
 
     navItems.forEach((item) => {
         item.addEventListener('click', () => {
@@ -21,9 +14,6 @@ export function initNotchNav(navSelector) {
 
             window.history.pushState({}, '', `/${url}`);
             
-            setActive(item, navItems);
-            
-
             window.dispatchEvent(new CustomEvent('navigationChange', { detail: { url } }));
         });
     });
@@ -35,28 +25,10 @@ export function initNotchNav(navSelector) {
         item.getAttribute('data-url') === newPath
     );
     
-    if (newActiveItem) {
-        setActive(newActiveItem, navItems);
-    }
+    
     
     window.location.href = window.location.pathname;
 });
     
-    function setActive(activeItem, allItems) {
-
-        allItems.forEach(i => {
-            const span = i.querySelector('span');
-            const svg = i.querySelector('svg');
-            
-            if (span) span.classList.remove('active');
-            if (svg) svg.setAttribute('stroke', '#BDBEBD');
-        });
-        
-
-        const activeSpan = activeItem.querySelector('span');
-        const activeSvg = activeItem.querySelector('svg');
-        
-        if (activeSpan) activeSpan.classList.add('active');
-        if (activeSvg) activeSvg.setAttribute('stroke', '#000000');
-    }
+    
 }
