@@ -157,15 +157,28 @@
     object-fit: cover;      
     display: block;
 }
+
 .text-header h2{
-    margin-top: .3em;
-    border-radius: 12px;
+    margin-top: .5em;
     font-weight: var(--bold-font-weight);
     color: #ffffff;
-    margin-left: auto;
-    margin-right: .5em;
-    padding: .2em .5em;
+    margin: .4em .8em;
+    border-radius: 32px;
+    padding: .2em .7em;
     background-color: #000000D6;
     font-size: large;
     font-family: var(--font-family-base) !important;
+}
+.text-header .Icns{
+    margin-left: 1em;
+}
+span.text-header{
+    color: #000000D6;
+    font-weight: var(--bold-font-weight);
+    margin-left: .5em;
+    font-size: x-large;
+    background: none;
+}
+.text-header{
+    
 }
