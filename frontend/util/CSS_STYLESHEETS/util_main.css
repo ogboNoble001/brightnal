@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Cinzel:wght@400..900&display=swap');
 @import url('https://fonts.cdnfonts.com/css/cabinet-grotesk');
 :root {
             --primary-color: #000000;
@@ -9,7 +9,7 @@
             --light-font-weight: 300;
             --font-family-base: 'Cabinet Grotesk', sans-serif;
             --font-family-alt: 'Noto Sans', sans-serif;
-            --font-family-price: "Playfair Display", serif ;
+            --font-family-price: "Cinzel", serif ;
         }
 
         *, *::after, *::before, button {

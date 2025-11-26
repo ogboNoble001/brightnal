@@ -157,8 +157,15 @@
     object-fit: cover;      
     display: block;
 }
-.text-header{
-    font-optical-sizing: auto;
-    margin-left: .8em;
-    font-family: var(--font-family-price) !important;
+.text-header h2{
+    margin-top: .3em;
+    border-radius: 12px;
+    font-weight: var(--bold-font-weight);
+    color: #ffffff;
+    margin-left: auto;
+    margin-right: .5em;
+    padding: .2em .5em;
+    background-color: #000000D6;
+    font-size: large;
+    font-family: var(--font-family-base) !important;
 }
