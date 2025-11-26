@@ -115,7 +115,7 @@
 .back-btn {
     position: absolute;
     top: 1em;
-    left: 1em;
+    left: .5em;
     width: 45px;
     height: 45px;
     padding: 10px;
