@@ -56,23 +56,26 @@ function createImageCard(item) {
         img.style.display = 'none';
         card.classList.add('loaded');
     };
-    
-    card.addEventListener('click', () => {
-    overlay.classList.add('active');
-    overlay.innerHTML = `
-    <div class="back-btn">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left-icon lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg></div>
-        <div class="image-wrapper">
-        <img src='${item.src}' />
-</div>
+    const overlay = document.querySelector(".overlay-div");
+const template = document.getElementById("overlay-template");
 
-    `;
-    overlay.querySelector('.back-btn').addEventListener('click', ()=>{
-          overlay.classList.remove('active')
-      })
-});
+function showOverlay(item) {
+    overlay.classList.add('active');
+    overlay.innerHTML = '';
+    const clone = template.content.cloneNode(true);
+    clone.querySelector("img").src = item.src;
+    overlay.appendChild(clone);
     
-    return card;
+overlay.querySelector('.back-btn').addEventListener('click', () => {
+        overlay.classList.remove('active');
+    });
+    
+}
+card.addEventListener('click', () => {
+    showOverlay(item); 
+});
+
+return card;
 }
 
 function fadeInCard(card, delay) {
