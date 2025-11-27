@@ -171,3 +171,8 @@
 .text-header .Icns{
     margin-left: 1em;
 }
+.header-{
+    margin-left: .6em;
+    font-size: 1.3em;
+    font-weight: var(--bold-font-weight);
+}
