@@ -127,3 +127,54 @@
 .notchNavBar .notAligned.has-indicator .indicator {
   display: block;
 }
+.priceWrapper{
+    position: absolute;
+    z-index: 55555;
+    bottom: 1em;
+    right: 1em;
+}
+.premiumBtn {
+    position: relative;
+    border: none;
+    margin-top: .5em;
+font-weight: var(--bold-font-weight);
+color: #000000;
+border-radius: 12px;
+padding: .7em;
+background-color: #F8F8FC;
+font-size: large;
+font-family: var(--font-family-base) !important;
+}
+    
+@property --angle{
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+.premiumBtn::after,
+.premiumBtn::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    z-index: -1;
+    border-radius: 12px;
+    padding: .4em;
+    background-image: conic-gradient( from var(--angle), transparent, #006aff, #ff00a5, #ff4545);
+    animation: 4s spin linear infinite;
+}
+.premiumBtn::before{
+    filter: blur(.6em);
+    opacity: .5;
+}
+@keyframes spin{
+    from{
+        --angle: 0deg;
+    }
+    to{
+        --angle: 360deg;
+    }
+}
