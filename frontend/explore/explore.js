@@ -18,23 +18,35 @@ const items = [
     { type: 'img', src: '/frontend/res/cbacc77b0a1343c3b0aa3a7a6eaa6163.jpg', color: '#b99268', h: 360 },
     { type: 'img', src: '/frontend/res/2a01626af3fa4e788eddfba0fb65f378.jpg', color: '#e6d7ce', h: 300 }
 ];
-const overlay = document.querySelector('.overlay-div') 
-const masonry = document.getElementById('masonry');
-const tpl = document.getElementById('cardTpl');
-const mainContent = document.getElementById('foryou');
-const skeletonMasonry = document.getElementById('skeletonMasonry');
 
-function createSkeletonCard() {
+const navigationStack = [];
+
+function getElement(selector) {
+    if (typeof selector === 'string') {
+        return document.querySelector(selector);
+    }
+    return selector;
+}
+
+function createSkeletonCard(isSmall = false) {
     const card = document.createElement('div');
-    card.className = 'card skeleton';
+    card.className = isSmall ? 'card skeleton small-skeleton' : 'card skeleton';
     
-    const randomHeight = Math.floor(Math.random() * 350) + 150;
+    const randomHeight = isSmall ? 
+        Math.floor(Math.random() * 150) + 100 : 
+        Math.floor(Math.random() * 350) + 150;
     card.style.setProperty('--sk-height', randomHeight + 'px');
     
     return card;
 }
 
-function createImageCard(item) {
+function createImageCard(item, template, overlaySelector, isRecommendation = false) {
+    const tpl = getElement(template);
+    if (!tpl) {
+        console.error('Template not found:', template);
+        return null;
+    }
+    
     const card = tpl.content.cloneNode(true).querySelector('.card');
     const wrap = card.querySelector('.media-wrap');
     const img = card.querySelector('img.media');
@@ -56,34 +68,190 @@ function createImageCard(item) {
         img.style.display = 'none';
         card.classList.add('loaded');
     };
-    const overlay = document.querySelector(".overlay-div");
-const template = document.getElementById("overlay-template");
-
-function showOverlay(item) {
-    overlay.classList.add('active');
-    overlay.innerHTML = '';
-    const clone = template.content.cloneNode(true);
-    clone.querySelector("img").src = item.src;
-    overlay.appendChild(clone);
     
-overlay.querySelector('.back-btn').addEventListener('click', () => {
-        overlay.classList.remove('active');
+    card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showOverlay(item, overlaySelector, isRecommendation);
     });
     
+    return card;
 }
-card.addEventListener('click', () => {
-    showOverlay(item); 
-});
 
-return card;
+function getRecommendations(currentItem, count = 6) {
+    const available = items.filter(item => item.src !== currentItem.src);
+    const shuffled = available.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+}
+
+function loadRecommendations(overlay, currentItem) {
+    const skeletonContainer = overlay.querySelector('.recommendations-skeleton');
+    const masonryContainer = overlay.querySelector('.recommendations-masonry');
+    
+    if (!skeletonContainer || !masonryContainer) return;
+    
+    skeletonContainer.style.display = 'block';
+    skeletonContainer.innerHTML = '';
+    
+    for (let i = 0; i < 6; i++) {
+        skeletonContainer.appendChild(createSkeletonCard(true));
+    }
+    
+    setTimeout(() => {
+        skeletonContainer.style.display = 'none';
+        
+        masonryContainer.style.display = 'block';
+        masonryContainer.innerHTML = '';
+        
+        const recommendations = getRecommendations(currentItem, 6);
+        
+        recommendations.forEach((item, index) => {
+            const card = createImageCard(item, '#recommendationCardTpl', '.overlay-div', true);
+            if (card) {
+                masonryContainer.appendChild(card);
+                fadeInCard(card, index * 50);
+            }
+        });
+        
+        initLazyLoading(masonryContainer);
+    }, 800);
+}
+
+function showOverlay(item, overlaySelector, isFromRecommendation = false) {
+    const overlay = getElement(overlaySelector || '.overlay-div');
+    
+    let template = document.querySelector('.overlay-template');
+    
+    if (!template && overlay) {
+        template = overlay.querySelector('.overlay-template');
+    }
+    
+    if (!overlay) {
+        console.error('Overlay not found:', overlaySelector);
+        return;
+    }
+    
+    if (!template) {
+        console.error('Template .overlay-template not found in document or overlay');
+        return;
+    }
+    
+    if (isFromRecommendation && overlay.classList.contains('active')) {
+        const currentState = {
+            item: getCurrentItemFromOverlay(overlay),
+            scrollPosition: overlay.scrollTop,
+            overlayHTML: overlay.innerHTML
+        };
+        navigationStack.push(currentState);
+    }
+    
+    overlay.classList.add('active');
+    overlay.scrollTop = 0;
+    
+    const existingContent = overlay.querySelector('.back-btn');
+    if (existingContent && existingContent.parentElement === overlay) {
+        while (overlay.firstChild) {
+            overlay.removeChild(overlay.firstChild);
+        }
+    }
+    
+    const clone = template.content.cloneNode(true);
+    
+    const mainImg = clone.querySelector("img");
+    if (mainImg) {
+        mainImg.src = item.src;
+        mainImg.dataset.itemSrc = item.src;
+    }
+    
+    overlay.appendChild(clone);
+    
+    const backBtn = overlay.querySelector('.back-btn');
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            handleBackNavigation(overlay);
+        });
+    }
+    
+    const addToCartBtn = overlay.querySelector('.diff1');
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            console.log('Added to cart:', item);
+        });
+    }
+    
+    setTimeout(() => {
+        loadRecommendations(overlay, item);
+    }, 100);
+}
+
+function getCurrentItemFromOverlay(overlay) {
+    const img = overlay.querySelector('.image-wrapper img');
+    if (img && img.dataset.itemSrc) {
+        return items.find(item => item.src === img.dataset.itemSrc);
+    }
+    return null;
+}
+
+function handleBackNavigation(overlay) {
+    if (navigationStack.length > 0) {
+        const previousState = navigationStack.pop();
+        if (previousState && previousState.item && previousState.overlayHTML) {
+            overlay.innerHTML = previousState.overlayHTML;
+            
+            const backBtn = overlay.querySelector('.back-btn');
+            if (backBtn) {
+                backBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    handleBackNavigation(overlay);
+                });
+            }
+            
+            const addToCartBtn = overlay.querySelector('.diff1');
+            if (addToCartBtn) {
+                addToCartBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    console.log('Added to cart:', previousState.item);
+                });
+            }
+            
+            const recommendationCards = overlay.querySelectorAll('.recommendation-card');
+            recommendationCards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const img = card.querySelector('img.media');
+                    if (img && img.src) {
+                        const clickedItem = items.find(item => img.src.includes(item.src.split('/').pop()));
+                        if (clickedItem) {
+                            showOverlay(clickedItem, '.overlay-div', true);
+                        }
+                    }
+                });
+            });
+            
+            requestAnimationFrame(() => {
+                overlay.scrollTop = previousState.scrollPosition || 0;
+            });
+        } else {
+            overlay.classList.remove('active');
+            navigationStack.length = 0;
+        }
+    } else {
+        overlay.classList.remove('active');
+        navigationStack.length = 0;
+    }
 }
 
 function fadeInCard(card, delay) {
     setTimeout(() => card.classList.add('loaded'), delay);
 }
 
-function initLazyLoading() {
-    const lazyImgs = document.querySelectorAll('img[data-src]');
+function initLazyLoading(container) {
+    const containerEl = getElement(container);
+    const lazyImgs = containerEl ? 
+        containerEl.querySelectorAll('img[data-src]') : 
+        document.querySelectorAll('img[data-src]');
+    
     const io = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -94,40 +262,100 @@ function initLazyLoading() {
             }
         });
     }, { rootMargin: '300px 0px' });
+    
     lazyImgs.forEach(img => io.observe(img));
 }
 
-for (let i = 0; i < 6; i++) {
-    skeletonMasonry.appendChild(createSkeletonCard());
+function initNavigation(navSelector) {
+    const navItems = document.querySelectorAll(navSelector || '.notchNavBar .notAligned');
+    
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            navItems.forEach(i => {
+                const span = i.querySelector('span');
+                const svg = i.querySelector('svg');
+                if (span) span.classList.remove('active');
+                if (svg) svg.setAttribute('stroke', '#BDBEBD');
+            });
+            
+            const span = item.querySelector('span');
+            const svg = item.querySelector('svg');
+            if (span) span.classList.add('active');
+            if (svg) svg.setAttribute('stroke', '#000');
+        });
+    });
 }
 
-const navItems = document.querySelectorAll('.notchNavBar .notAligned');
+function addNotificationIndicator(selector) {
+    const element = getElement(selector || '.notAligned.flex-col:last-child');
+    if (element) {
+        element.classList.add('has-indicator');
+    }
+}
 
-navItems.forEach(item => {
-    item.addEventListener('click', () => {
-        navItems.forEach(i => {
-            i.querySelector('span').classList.remove('active');
-            i.querySelector('svg').setAttribute('stroke', '#BDBEBD');
+function initMasonry(config = {}) {
+    const {
+        masonrySelector = '#masonry',
+        skeletonSelector = '#skeletonMasonry',
+        mainContentSelector = '#foryou',
+        templateSelector = '#cardTpl',
+        overlaySelector = '.overlay-div',
+        items: itemsData = items,
+        skeletonCount = 6,
+        skeletonDelay = 1000,
+        fadeDelay = 100
+    } = config;
+    
+    const masonry = getElement(masonrySelector);
+    const skeletonMasonry = getElement(skeletonSelector);
+    const mainContent = getElement(mainContentSelector);
+    
+    if (!masonry) {
+        console.error('Masonry container not found:', masonrySelector);
+        return;
+    }
+    
+    if (skeletonMasonry) {
+        for (let i = 0; i < skeletonCount; i++) {
+            skeletonMasonry.appendChild(createSkeletonCard());
+        }
+    }
+    
+    setTimeout(() => {
+        if (skeletonMasonry) {
+            skeletonMasonry.style.display = 'none';
+        }
+        if (mainContent) {
+            mainContent.style.display = 'block';
+        }
+        
+        itemsData.forEach((item, index) => {
+            const card = createImageCard(item, templateSelector, overlaySelector, false);
+            if (card) {
+                masonry.appendChild(card);
+                fadeInCard(card, index * fadeDelay);
+            }
         });
-        item.querySelector('span').classList.add('active');
-        item.querySelector('svg').setAttribute('stroke', '#000');
-    });
+        
+        initLazyLoading(masonry);
+    }, skeletonDelay);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const hasDefaultMasonry = document.querySelector('#masonry, .masonry');
+    
+    if (hasDefaultMasonry) {
+        initMasonry();
+        initNavigation();
+        addNotificationIndicator();
+    }
 });
 
-const addNotify = true;
-if (addNotify) {
-    const meItem = document.querySelector('.notAligned.flex-col:last-child');
-    meItem.classList.add('has-indicator');
-}
-setTimeout(() => {
-    skeletonMasonry.style.display = 'none';
-    mainContent.style.display = 'block';
-    
-    items.forEach((item, index) => {
-        const card = createImageCard(item);
-        masonry.appendChild(card);
-        fadeInCard(card, index * 100);
-    });
-    
-    initLazyLoading();
-}, 1000);
+window.MasonrySystem = {
+    init: initMasonry,
+    createCard: createImageCard,
+    showOverlay: showOverlay,
+    initNav: initNavigation,
+    addIndicator: addNotificationIndicator,
+    lazyLoad: initLazyLoading
+};
