@@ -9,10 +9,18 @@
       initNotchNav('.notchNavBar');
   </script>
     <link rel="shortcut icon" type="image/x-icon" href="/frontend/res/file_00000000d5b47246a67fb09c50189192.png">
-    <link rel="stylesheet" href="/frontend/search/search.css">
     <link rel="stylesheet" href="/frontend/util/CSS_STYLESHEETS/util_main.css">
+    <link rel="stylesheet" href="/frontend/search/search.css">
 </head>
 <body class="diff4">
+    <div class="inputPrnt flex-row ai-c jc-fs diff1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="grey" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="notAligned lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+                <div class="notAligned closeBtn">
+            Cancel
+        </div>
+        <input type="search" placeholder="Search clothes" name="" class="notAligned">
+    </div>
+
     <nav class="notchNavBar notAligned  jc-sb">
     <div class="notAligned flex-col" data-url="explore">
 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class=" transform-m-e lucide lucide-mouse-pointer-click-icon lucide-mouse-pointer-click"><path d="M14 4.1 12 6"/><path d="m5.1 8-2.9-.8"/><path d="m6 12-1.9 2"/><path d="M7.2 2.2 8 5.1"/><path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z"/></svg>
@@ -33,6 +41,10 @@
     <span>Me</span>
     </div>
     </nav>
+        <div class="overlay-div">
+
+    </div>
+    <script src="/frontend/util/JS_SCRIPTS/util_main.js" type="text/javascript" charset="utf-8"></script>
         <script src="/frontend/search/search.js" type="text/javascript" charset="utf-8"></script>
         <script src="/frontend/util/JS_SCRIPTS/handleClick_SwitchPg.js" type="text/javascript" charset="utf-8"></script>
 </body>

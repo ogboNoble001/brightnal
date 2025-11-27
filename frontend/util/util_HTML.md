@@ -33,10 +33,15 @@
     <span>Me</span>
     </div>
     </nav>
+     <script src="/frontend/util/JS_SCRIPTS/util_main.js" type="text/javascript" charset="utf-8"></script>
 <script src="/frontend/util/JS_SCRIPTS/handleClick_SwitchPg.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
+<!--/*const overlay = document.querySelector('.overlay-div');
+const styles = window.getComputedStyle(overlay);
 
+console.log(styles); // Logs all computed styles
+console.log(styles.backgroundColor); // Logs the 'display' property specifically/*-->
 <!--    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

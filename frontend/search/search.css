@@ -1,0 +1,64 @@
+.inputPrnt{
+        z-index: 55556;
+        position: fixed;
+        top: 2em;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 85%;
+        padding: .6em .4em;
+        padding-left: .9em ;
+        background: rgba(255, 255, 255, 1);
+        color: #000;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px); 
+    -webkit-backdrop-filter: blur(15px); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.3s ease;
+}
+.inputPrnt:hover, .inputPrnt:focus{
+        border: 2px solid skyblue;
+}
+.inputPrnt input{
+        border: none;
+        position: relative;
+        padding: .6em .4em;
+        width: 100%;
+        font-size: 1.1em;
+        font-weight: 400;
+}
+.overlay-div {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: initial;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 55555;
+        display: none !important;
+        pointer-events: none;
+}
+
+.overlay-div.active {
+        display: flex !important;
+        pointer-events: auto;
+}
+
+.closeBtn {
+        position: absolute;
+        display: none;
+        z-index: 666666;
+        bottom: .5em;
+        right: .5em;
+        padding: .4em;
+        background-color: grey;
+        border-radius: 8px;
+        font-size: large;
+        color: white;
+}
+
+.closeBtn.active {
+        display: block;
+}
