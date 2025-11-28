@@ -56,9 +56,23 @@
         font-size: medium;
         color: #141115;
 }
+.clearBtn{
+        position: absolute;
+        z-index: 666666;
+        display: none;
+        right: 3.5em;
+        bottom: .75em;
+        color: grey;
+        padding: 0 .4em;
+        font-size: medium;
+}
+
+.clearBtn.active{
+        display: flex;
+}
 
 .closeBtn.active {
-        display: block;
+        display: flex;
 }
 .inputPrnt:has(.closeBtn.closeBtn.active){
         width: 90%;
