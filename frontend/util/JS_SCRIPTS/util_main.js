@@ -6,7 +6,6 @@ window.addEventListener('DOMContentLoaded', () => {
         const closeBtn = inputPrnt.querySelector('.closeBtn');
         const input = document.querySelector('.searchInput');
         const clearBtn = document.querySelector('.clearBtn');
-        
         if (!closeBtn || !input || !clearBtn) return;
         
         input.addEventListener('keydown', (e) => {
@@ -25,7 +24,7 @@ window.addEventListener('DOMContentLoaded', () => {
         inputPrnt.addEventListener('click', (e) => e.stopPropagation());
         
         overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) {
+                if (e.target === overlay && input.value === '') {
                         overlay.classList.remove('active');
                         closeBtn.classList.remove('active');
                         clearBtn.classList.remove('active');
@@ -39,7 +38,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 overlay.classList.remove('active');
                 closeBtn.classList.remove('active');
                 clearBtn.classList.remove('active');
-                input.value=''
+                input.value = '';
                 input.blur();
         });
         
