@@ -16,8 +16,8 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
         transition: border 0.3s ease, width .1s linear;
 }
-.inputPrnt:has(.input:focus){
-        border: 2px solid skyblue;
+.inputPrnt:has(.searchInput:focus){
+        border: 2px solid skyblue !important;
 }
 .inputPrnt input{
         border: none;
