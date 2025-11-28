@@ -204,4 +204,5 @@ input[type="search"]::-webkit-search-cancel-button {
         }
 .cart-btn{
     top: 2.1em;
+    z-index: 34444;
 }
