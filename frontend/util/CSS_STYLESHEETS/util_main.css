@@ -199,3 +199,26 @@ font-family: var(--font-family-base) !important;
         --angle: 360deg;
     }
 }
+.cart-btn {
+    position: fixed;
+    top: 16px;
+    width: 40px;
+    height: 40px;
+    z-index: 9999999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.cart-btn {
+    right: 2em;
+}
+
+.cart-btn svg {
+    width: 20px;
+    height: 20px;
+    
+}

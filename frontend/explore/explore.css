@@ -376,3 +376,6 @@
 .card.loaded .color-tile {
     opacity: 0;
 }
+.notchNavBar{
+    z-index: 999999;
+}
