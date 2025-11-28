@@ -87,9 +87,6 @@ input[type="search"]::-webkit-search-cancel-button {
 .main-content{
     margin-bottom: 9em;
 }
-
-
-        /* Hero Section */
         .hero-section {
             position: relative;
             width: 100%;
@@ -205,3 +202,6 @@ input[type="search"]::-webkit-search-cancel-button {
         .grid-four .grid-item {
             aspect-ratio: 3/4;
         }
+.cart-btn{
+    top: 2.1em;
+}
