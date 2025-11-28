@@ -7,5 +7,6 @@ window.addEventListener('DOMContentLoaded', () => {
                         window.openOverlay();
                         
                 }
+        
         });
 });
