@@ -133,8 +133,10 @@
 .notchNavBar .notAligned {
   position: relative;
 }
-
-.notchNavBar .notAligned .indicator {
+* > :has(.indicator):not(.notchNavBar){
+    position: relative;
+}
+.notchNavBar .notAligned .indicator , * .indicator{
   position: absolute;
   top: 0;
   left: 1em;
