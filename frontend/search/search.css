@@ -1,3 +1,6 @@
+img{
+    object-position: top !important;
+}
 .inputPrnt{
         z-index: 55556;
         position: fixed;
