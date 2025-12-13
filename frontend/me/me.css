@@ -1,0 +1,59 @@
+main{
+        padding: 2em;
+        position: relative;
+        height: 100vh;
+}
+.profile-img img{
+        border-radius: 50%;
+        width: 90px;
+        height: 90px;
+        background-size: cover;
+}
+span.username{
+        font-weight: var(--bold-font-weight) !important;
+}
+.sign-in{
+        background-color:#F2F2F2;
+        color: #000000;
+        padding: .3em .6em;
+        border-radius: 8px;
+        margin-right: auto;
+}
+.actions > .notAligned{
+        gap: .16em;
+}
+.asideIcnsPrnt{
+        position: absolute;
+        bottom: 8em;
+}
+.asideIcns {
+    position: relative;
+    width: 60px;
+    height: 250px;
+    padding: 0.3em;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    overflow: hidden;
+
+    /* Glass effect overlay */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(56px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    color: #000;
+    transition: all 0.3s ease;
+}
+
+.asideIcns::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("/frontend/res/images (3).jpeg") center/cover no-repeat;
+    opacity: .3;  /* Adjust image opacity here */
+    z-index: -1;   /* Places image behind overlay and content */
+}
+
+.asideIcns:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
