@@ -186,7 +186,7 @@ font-family: var(--font-family-base) !important;
     z-index: -1;
     border-radius: 12px;
     padding: .4em;
-    background-image: conic-gradient( from var(--angle), transparent, #006aff, #ff00a5, #ff4545);
+    
     animation: 4s spin linear infinite;
 }
 .premiumBtn::before{

@@ -44,7 +44,13 @@
 <script src="/frontend/util/JS_SCRIPTS/handleClick_SwitchPg.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
-<!--/*const overlay = document.querySelector('.overlay-div');
+<!--
+
+    Add this to .premiumBtn
+    
+    background-image: conic-gradient( from var(--angle), transparent, #006aff, #ff00a5, #ff4545);
+
+/*const overlay = document.querySelector('.overlay-div');
 const styles = window.getComputedStyle(overlay);
 
 console.log(styles); // Logs all computed styles

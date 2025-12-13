@@ -55,3 +55,9 @@ span.username{
 .asideIcns:hover {
     background: rgba(255, 255, 255, 0.15);
 }
+.asideIcns > *{
+        border-radius: 50%;
+}
+.asideIcns > *.active{
+        
+}
