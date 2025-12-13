@@ -7,6 +7,10 @@
                 },
               {
                   "source": "/bookmark", "destination": "/frontend/bookmark/bookmark.html"
+                },
+                {
+                  "source": "/me",
+                  "destination": "frontend/bookmark/me.html"
                 }
         ]
 }
