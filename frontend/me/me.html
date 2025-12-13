@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/frontend/me/me.css">
 </head>
 <body>
-    <main class="flex-col">
+    <main class="flex-col diff4 diff3">
         <div class="header-main notAligned flex-col diff2">
             <div class="notAligned sign-in">
                 Signed in
@@ -37,6 +37,37 @@
              </div>
          </div>
         </div>
+    <div class="diff4 container">
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">
+                All Activity <span class="count" id="count-all">9</span>
+            </button>
+            <button class="filter-btn" data-filter="order">
+                Orders <span class="count" id="count-order">1</span>
+            </button>
+            <button class="filter-btn" data-filter="shipped">
+                Shipped <span class="count" id="count-shipped">1</span>
+            </button>
+            <button class="filter-btn" data-filter="delivered">
+                Delivered <span class="count" id="count-delivered">3</span>
+            </button>
+        </div>
+
+        <div class="timeline" id="timeline">
+            <!-- Timeline items will be inserted here by JavaScript -->
+        </div>
+
+        <div class="empty-state hidden" id="emptyState">
+            <div class="empty-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 7h-4V5l-2-2h-4L8 5v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zm10 15H4V9h16v11z"/>
+                </svg>
+            </div>
+            <h3>No activities found</h3>
+            <p>Try selecting a different filter</p>
+        </div>
+    </div>
+
         <div class="asideIcnsPrnt">
         <aside class="asideIcns m-r notAligned flex-col diff3">
            <div class="active b">
