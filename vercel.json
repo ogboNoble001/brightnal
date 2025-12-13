@@ -10,7 +10,7 @@
                 },
                 {
                   "source": "/me",
-                  "destination": "frontend/bookmark/me.html"
+                  "destination": "frontend/me/me.html"
                 }
         ]
 }
