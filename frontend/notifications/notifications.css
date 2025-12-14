@@ -1,0 +1,43 @@
+main{
+    position: relative;
+}
+.asideIcnsPrnt{
+        position: absolute;
+        bottom: 8em;
+}
+.asideIcns {
+    position: fixed;
+    width: 60px;
+    left: 2em;
+    height: 250px;
+    bottom: 6em;
+    padding: 0.3em;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(56px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    color: #000;
+    transition: all 0.3s ease;
+}
+
+.asideIcns::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("/frontend/res/images (3).jpeg") center/cover no-repeat;
+    opacity: .3; 
+    z-index: -1;
+}
+
+.asideIcns:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+.asideIcns > *{
+        border-radius: 50%;
+}
+.asideIcns > *.active{
+        
+}

@@ -1,12 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
-const userNameEl = document.getElementById('username');
-const signedInEl = document.getElementById('signedIn') 
+    const appInterface_User = {
+    userNameEl: document.querySelector('.username'),
+    signedInEl: document.querySelector('.signedIn'),
+    purchases_numberEl : document.querySelector('.purchases_number'),
+    bookmarks_numberEl : document.querySelector('.bookmarks_number'),
+    wishlist_numberEl : document.querySelector('.wishlist_number')
+};
+
 const mockDatabase = {
     userName: '@brightnal',
-    signedIn: false,
+    signedIn: true,
     stats: {
-        purchases: 4,
-        bookmarks: 504,
+        purchases: 40,
+        bookmarks: 4,
         wishlist: 544,
         preOrders: 0
     }
@@ -17,7 +23,7 @@ async function getUserData() {
     
     try {
         const response = await fetch('/api/user');
-        if (!response.ok) throw new Error();
+        if (!response.ok) throw new Error('Network response not ok');
         database = await response.json();
     } catch {
         database = mockDatabase;
@@ -26,22 +32,27 @@ async function getUserData() {
     const userData = {
         userName: database.userName,
         signedIn: database.signedIn ? 'Signed in' : 'Guest mode',
-        productRelatedData: {
-            ...database.stats
-        }
+        productRelatedData: { ...database.stats }
     };
     
-    // Update DOM elements directly here
-    if (userNameEl) {
-        userNameEl.textContent = userData.userName;
+    // Update DOM elements directly
+    if (appInterface_User.userNameEl) {
+        appInterface_User.userNameEl.textContent = userData.userName;
     }
-    if (signedInEl) {
-        signedInEl.textContent = userData.signedIn;
+    if (appInterface_User.signedInEl) {
+        appInterface_User.signedInEl.textContent = userData.signedIn;
     }
-    
+    if (appInterface_User.purchases_numberEl) {
+        appInterface_User.purchases_numberEl.textContent = userData.productRelatedData.purchases
+    }
+    if (appInterface_User.bookmarks_numberEl) {
+        appInterface_User.bookmarks_numberEl.textContent = userData.productRelatedData.bookmarks
+    }
+    if (appInterface_User.wishlist_numberEl) {
+    appInterface_User.wishlist_numberEl.textContent = userData.productRelatedData.wishlist;
+}
     return userData;
 }
-
 
     const timelineData = [
     {
