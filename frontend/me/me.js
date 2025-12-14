@@ -1,6 +1,48 @@
-// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
+const userNameEl = document.getElementById('username');
+const signedInEl = document.getElementById('signedIn') 
+const mockDatabase = {
+    userName: '@brightnal',
+    signedIn: false,
+    stats: {
+        purchases: 4,
+        bookmarks: 504,
+        wishlist: 544,
+        preOrders: 0
+    }
+};
+
+async function getUserData() {
+    let database;
     
+    try {
+        const response = await fetch('/api/user');
+        if (!response.ok) throw new Error();
+        database = await response.json();
+    } catch {
+        database = mockDatabase;
+    }
+    
+    const userData = {
+        userName: database.userName,
+        signedIn: database.signedIn ? 'Signed in' : 'Guest mode',
+        productRelatedData: {
+            ...database.stats
+        }
+    };
+    
+    // Update DOM elements directly here
+    if (userNameEl) {
+        userNameEl.textContent = userData.userName;
+    }
+    if (signedInEl) {
+        signedInEl.textContent = userData.signedIn;
+    }
+    
+    return userData;
+}
+
+
     const timelineData = [
     {
         id: 1,
@@ -231,10 +273,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-
-    // Initialize
+async function init() {
+    await getUserData(); // This now handles the DOM updates
     updateCounts();
     renderTimeline();
-    
     console.log('Timeline initialized successfully');
+}
+init();
 });
