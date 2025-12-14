@@ -2,117 +2,117 @@
 document.addEventListener('DOMContentLoaded', function() {
     
     const timelineData = [
-        {
-            id: 1,
-            type: 'delivered',
-            title: 'Order Delivered',
-            description: 'Wireless Noise-Cancelling Headphones',
-            date: 'December 10, 2025',
-            time: '2:34 PM',
-            icon: 'check',
-            iconClass: 'icon-delivered',
-            orderNumber: '#ORD-8829',
-            amount: '$299.99',
-            details: 'Package delivered to front door'
-        },
-        {
-            id: 2,
-            type: 'review',
-            title: 'Review Posted',
-            description: 'You rated "Running Shoes Pro X" ⭐⭐⭐⭐⭐',
-            date: 'December 8, 2025',
-            time: '11:20 AM',
-            icon: 'star',
-            iconClass: 'icon-review',
-            details: '"Great fit and very comfortable for long runs!"'
-        },
-        {
-            id: 3,
-            type: 'shipped',
-            title: 'Order Shipped',
-            description: 'Smart Watch Series 5',
-            date: 'December 7, 2025',
-            time: '9:15 AM',
-            icon: 'truck',
-            iconClass: 'icon-shipped',
-            orderNumber: '#ORD-8830',
-            amount: '$399.99',
-            tracking: 'TRK-9384756291',
-            details: 'Estimated delivery: Dec 12-14'
-        },
-        {
-            id: 4,
-            type: 'order',
-            title: 'Order Placed',
-            description: 'Smart Watch Series 5 + Screen Protector',
-            date: 'December 5, 2025',
-            time: '6:45 PM',
-            icon: 'bag',
-            iconClass: 'icon-order',
-            orderNumber: '#ORD-8830',
-            amount: '$414.98',
-            items: 2
-        },
-        {
-            id: 5,
-            type: 'delivered',
-            title: 'Order Delivered',
-            description: 'Running Shoes Pro X',
-            date: 'December 3, 2025',
-            time: '1:22 PM',
-            icon: 'check',
-            iconClass: 'icon-delivered',
-            orderNumber: '#ORD-8821',
-            amount: '$149.99',
-            details: 'Signed by: John D.'
-        },
-        {
-            id: 6,
-            type: 'reward',
-            title: 'Reward Points Earned',
-            description: 'You earned 500 points from recent purchases',
-            date: 'December 1, 2025',
-            time: '12:00 PM',
-            icon: 'gift',
-            iconClass: 'icon-reward',
-            details: 'Total points: 2,450'
-        },
-        {
-            id: 7,
-            type: 'payment',
-            title: 'Payment Method Added',
-            description: 'Visa ending in 4242',
-            date: 'November 28, 2025',
-            time: '3:18 PM',
-            icon: 'card',
-            iconClass: 'icon-payment',
-            details: 'Set as default payment method'
-        },
-        {
-            id: 8,
-            type: 'address',
-            title: 'Shipping Address Updated',
-            description: 'New address added',
-            date: 'November 25, 2025',
-            time: '10:05 AM',
-            icon: 'location',
-            iconClass: 'icon-address',
-            details: '123 Main St, San Francisco, CA'
-        },
-        {
-            id: 9,
-            type: 'delivered',
-            title: 'Order Delivered',
-            description: 'Coffee Maker Deluxe + Coffee Beans (2lb)',
-            date: 'November 20, 2025',
-            time: '4:50 PM',
-            icon: 'check',
-            iconClass: 'icon-delivered',
-            orderNumber: '#ORD-8815',
-            amount: '$189.97',
-            details: 'Left at mailroom'
-        }
-    ];
+    {
+        id: 1,
+        type: 'delivered',
+        title: 'Order Delivered',
+        description: 'Wireless Noise-Cancelling Headphones',
+        date: 'December 10, 2025',
+        time: '2:34 PM',
+        icon: 'check',
+        iconClass: 'icon-delivered',
+        orderNumber: '#NG-ORD-8829',
+        amount: '₦450,000',
+        details: 'Package delivered to Lekki Phase 1 gate'
+    },
+    {
+        id: 2,
+        type: 'review',
+        title: 'Review Posted',
+        description: 'You rated "Running Shoes Pro X" ⭐⭐⭐⭐⭐',
+        date: 'December 8, 2025',
+        time: '11:20 AM',
+        icon: 'star',
+        iconClass: 'icon-review',
+        details: '"Very comfortable. Perfect for morning jogs."'
+    },
+    {
+        id: 3,
+        type: 'shipped',
+        title: 'Order Shipped',
+        description: 'Smart Watch Series 5',
+        date: 'December 7, 2025',
+        time: '9:15 AM',
+        icon: 'truck',
+        iconClass: 'icon-shipped',
+        orderNumber: '#NG-ORD-8830',
+        amount: '₦620,000',
+        tracking: 'LAG-TRK-9384756',
+        details: 'Dispatch from Ikeja hub. ETA: 12–14 Dec'
+    },
+    {
+        id: 4,
+        type: 'order',
+        title: 'Order Placed',
+        description: 'Smart Watch Series 5 + Screen Protector',
+        date: 'December 5, 2025',
+        time: '6:45 PM',
+        icon: 'bag',
+        iconClass: 'icon-order',
+        orderNumber: '#NG-ORD-8830',
+        amount: '₦650,000',
+        items: 2
+    },
+    {
+        id: 5,
+        type: 'delivered',
+        title: 'Order Delivered',
+        description: 'Running Shoes Pro X',
+        date: 'December 3, 2025',
+        time: '1:22 PM',
+        icon: 'check',
+        iconClass: 'icon-delivered',
+        orderNumber: '#NG-ORD-8821',
+        amount: '₦210,000',
+        details: 'Received by: Tunde A.'
+    },
+    {
+        id: 6,
+        type: 'reward',
+        title: 'Reward Points Earned',
+        description: 'You earned 500 points from recent purchases',
+        date: 'December 1, 2025',
+        time: '12:00 PM',
+        icon: 'gift',
+        iconClass: 'icon-reward',
+        details: 'Total points: 2,450'
+    },
+    {
+        id: 7,
+        type: 'payment',
+        title: 'Payment Method Added',
+        description: 'Debit Card ending in 0921',
+        date: 'November 28, 2025',
+        time: '3:18 PM',
+        icon: 'card',
+        iconClass: 'icon-payment',
+        details: 'Set as default payment method'
+    },
+    {
+        id: 8,
+        type: 'address',
+        title: 'Shipping Address Updated',
+        description: 'New delivery address added',
+        date: 'November 25, 2025',
+        time: '10:05 AM',
+        icon: 'location',
+        iconClass: 'icon-address',
+        details: '15 Admiralty Way, Lekki Phase 1, Lagos'
+    },
+    {
+        id: 9,
+        type: 'delivered',
+        title: 'Order Delivered',
+        description: 'Coffee Maker Deluxe + Coffee Beans (2kg)',
+        date: 'November 20, 2025',
+        time: '4:50 PM',
+        icon: 'check',
+        iconClass: 'icon-delivered',
+        orderNumber: '#NG-ORD-8815',
+        amount: '₦285,000',
+        details: 'Dropped with estate security'
+    }
+];
 
     const icons = {
         check: '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
