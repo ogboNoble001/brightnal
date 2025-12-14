@@ -1,6 +1,20 @@
 window.addEventListener('DOMContentLoaded', () => {
+   const allElems =  document.querySelectorAll('.relElem')
+   allElems.forEach((elem)=>{
+        elem.style.position= 'relative'
+        const absElem = document.createElement('div') 
+    absElem.style.position= 'absolute'
+    absElem.style.borderRadius= '50%'
+    absElem.classList.add('absElem')
+    absElem.style.width= '4.5px'
+    absElem.style.backgroundColor='red'
+    absElem.style.height= '5px'
+    absElem.style.top= '-.3em'
+    absElem.style.left= '1.2em'
+    elem.appendChild(absElem)
+    })
+
     let currentCartIndex = 0;
-    
     const cart = document.querySelector('.cartBtn_checkout');
     
     if (!cart) return;
