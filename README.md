@@ -45,6 +45,7 @@ Icons are inline SVGs using Lucide icon format.
 project-root/
 │
 ├── frontend/
+    |
 │   ├── search/
 │   │   ├── search.css
 │   │   └── search.js

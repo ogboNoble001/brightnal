@@ -6,7 +6,7 @@
                   "source": "/search", "destination": "/frontend/search/search.html"
                 },
               {
-                  "source": "/bookmark", "destination": "/frontend/bookmark/bookmark.html"
+                  "source": "/notifications", "destination": "/frontend/notifications/notifications.html"
                 },
                 {
                   "source": "/me",
