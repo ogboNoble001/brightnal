@@ -1,4 +1,13 @@
 window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('popstate', function (event) {
+    alert('You are trying to go back!');
+    // Optionally prevent going back by pushing the state back
+    history.pushState(null, '', location.href);
+});
+
+// Initialize state to track
+history.pushState(null, '', location.href);
+    
    const allElems =  document.querySelectorAll('.relElem')
    allElems.forEach((elem)=>{
         elem.style.position= 'relative'
