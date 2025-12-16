@@ -22,7 +22,7 @@
     }
     
     window.UserUtil = {
-        appInterface_User: null, // Will be set on DOMContentLoaded
+        appInterface_User: null, 
         mockDatabase,
         async load() {
             const db = await getUserData();

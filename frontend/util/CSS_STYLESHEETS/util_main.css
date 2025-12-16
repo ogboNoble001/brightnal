@@ -4,6 +4,7 @@
             --primary-color: #000000;
             --secondary-color: #E9E9E9;
             --text-muted-color: #555555;
+            --text-muter-color: #9C9A9C;
             --bold-font-weight: 700;
             --regular-font-weight: 400;
             --light-font-weight: 300;
@@ -55,6 +56,10 @@
 
         .text-muted {
             color: #555555;
+        }
+        
+        .text-muter{
+            color: #9C9A9C;
         }
 
         .diff1 { gap: .3em; }
@@ -223,4 +228,16 @@ font-family: var(--font-family-base) !important;
     width: 20px;
     height: 20px;
     
+}
+.notification_dot{
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: red;
+    top: 1.1em;
+    right: .6em;
+}
+*:has(.notification_dot){
+    position: relative;
 }

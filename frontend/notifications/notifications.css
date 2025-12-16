@@ -1,6 +1,33 @@
 main{
     position: relative;
 }
+section.main-section .mainTxt{
+    padding: 1em;
+    width: fit-content;
+}
+
+.notification_el_Prnt{
+    margin-top: 1em;
+}
+.notification_el{
+    padding: 1.7em 1.5em;
+    margin-bottom: auto;
+    border-top: 1.4px solid #e2e8f0;
+}
+.notification_el_Prnt>div:last-child{
+    border-bottom: 1.4px solid #e2e8f0;
+} 
+.notification_el_img {
+      width: 50px;
+      flex: 0 0 auto;
+      height: 50px;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 4px;
+      }
+ .notification_el_txt{
+          align-self: flex-start;
+      }
 .asideIcnsPrnt{
         position: absolute;
         bottom: 8em;
