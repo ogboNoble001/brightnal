@@ -1,171 +1,119 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const appInterface_User = {
-    userNameEl: document.querySelector('.username'),
-    signedInEl: document.querySelector('.signedIn'),
-    purchases_numberEl : document.querySelector('.purchases_number'),
-    bookmarks_numberEl : document.querySelector('.bookmarks_number'),
-    wishlist_numberEl : document.querySelector('.wishlist_number')
-};
-
-const mockDatabase = {
-    userName: '@brightnal',
-    signedIn: true,
-    stats: {
-        purchases: 40,
-        bookmarks: 4,
-        wishlist: 544,
-        preOrders: 0
-    }
-};
-
-async function getUserData() {
-    let database;
+document.addEventListener('DOMContentLoaded', async function() {
+    /* ✅ USE CENTRALIZED USER UPDATE */
+    const userData = await UserUtil.updateUI(); // This handles all UI updates automatically
     
-    try {
-        const response = await fetch('/api/user');
-        if (!response.ok) throw new Error('Network response not ok');
-        database = await response.json();
-    } catch {
-        database = mockDatabase;
-    }
-    
-    const userData = {
-        userName: database.userName,
-        signedIn: database.signedIn ? 'Signed in' : 'Guest mode',
-        productRelatedData: { ...database.stats }
-    };
-    
-    // Update DOM elements directly
-    if (appInterface_User.userNameEl) {
-        appInterface_User.userNameEl.textContent = userData.userName;
-    }
-    if (appInterface_User.signedInEl) {
-        appInterface_User.signedInEl.textContent = userData.signedIn;
-    }
-    if (appInterface_User.purchases_numberEl) {
-        appInterface_User.purchases_numberEl.textContent = userData.productRelatedData.purchases
-    }
-    if (appInterface_User.bookmarks_numberEl) {
-        appInterface_User.bookmarks_numberEl.textContent = userData.productRelatedData.bookmarks
-    }
-    if (appInterface_User.wishlist_numberEl) {
-    appInterface_User.wishlist_numberEl.textContent = userData.productRelatedData.wishlist;
-}
-    return userData;
-}
-
     const timelineData = [
-    {
-        id: 1,
-        type: 'delivered',
-        title: 'Order Delivered',
-        description: 'Wireless Noise-Cancelling Headphones',
-        date: 'December 10, 2025',
-        time: '2:34 PM',
-        icon: 'check',
-        iconClass: 'icon-delivered',
-        orderNumber: '#NG-ORD-8829',
-        amount: '₦450,000',
-        details: 'Package delivered to Lekki Phase 1 gate'
-    },
-    {
-        id: 2,
-        type: 'review',
-        title: 'Review Posted',
-        description: 'You rated "Running Shoes Pro X" ⭐⭐⭐⭐⭐',
-        date: 'December 8, 2025',
-        time: '11:20 AM',
-        icon: 'star',
-        iconClass: 'icon-review',
-        details: '"Very comfortable. Perfect for morning jogs."'
-    },
-    {
-        id: 3,
-        type: 'shipped',
-        title: 'Order Shipped',
-        description: 'Smart Watch Series 5',
-        date: 'December 7, 2025',
-        time: '9:15 AM',
-        icon: 'truck',
-        iconClass: 'icon-shipped',
-        orderNumber: '#NG-ORD-8830',
-        amount: '₦620,000',
-        tracking: 'LAG-TRK-9384756',
-        details: 'Dispatch from Ikeja hub. ETA: 12–14 Dec'
-    },
-    {
-        id: 4,
-        type: 'order',
-        title: 'Order Placed',
-        description: 'Smart Watch Series 5 + Screen Protector',
-        date: 'December 5, 2025',
-        time: '6:45 PM',
-        icon: 'bag',
-        iconClass: 'icon-order',
-        orderNumber: '#NG-ORD-8830',
-        amount: '₦650,000',
-        items: 2
-    },
-    {
-        id: 5,
-        type: 'delivered',
-        title: 'Order Delivered',
-        description: 'Running Shoes Pro X',
-        date: 'December 3, 2025',
-        time: '1:22 PM',
-        icon: 'check',
-        iconClass: 'icon-delivered',
-        orderNumber: '#NG-ORD-8821',
-        amount: '₦210,000',
-        details: 'Received by: Tunde A.'
-    },
-    {
-        id: 6,
-        type: 'reward',
-        title: 'Reward Points Earned',
-        description: 'You earned 500 points from recent purchases',
-        date: 'December 1, 2025',
-        time: '12:00 PM',
-        icon: 'gift',
-        iconClass: 'icon-reward',
-        details: 'Total points: 2,450'
-    },
-    {
-        id: 7,
-        type: 'payment',
-        title: 'Payment Method Added',
-        description: 'Debit Card ending in 0921',
-        date: 'November 28, 2025',
-        time: '3:18 PM',
-        icon: 'card',
-        iconClass: 'icon-payment',
-        details: 'Set as default payment method'
-    },
-    {
-        id: 8,
-        type: 'address',
-        title: 'Shipping Address Updated',
-        description: 'New delivery address added',
-        date: 'November 25, 2025',
-        time: '10:05 AM',
-        icon: 'location',
-        iconClass: 'icon-address',
-        details: '15 Admiralty Way, Lekki Phase 1, Lagos'
-    },
-    {
-        id: 9,
-        type: 'delivered',
-        title: 'Order Delivered',
-        description: 'Coffee Maker Deluxe + Coffee Beans (2kg)',
-        date: 'November 20, 2025',
-        time: '4:50 PM',
-        icon: 'check',
-        iconClass: 'icon-delivered',
-        orderNumber: '#NG-ORD-8815',
-        amount: '₦285,000',
-        details: 'Dropped with estate security'
-    }
-];
+        {
+            id: 1,
+            type: 'delivered',
+            title: 'Order Delivered',
+            description: 'Wireless Noise-Cancelling Headphones',
+            date: 'December 10, 2025',
+            time: '2:34 PM',
+            icon: 'check',
+            iconClass: 'icon-delivered',
+            orderNumber: '#NG-ORD-8829',
+            amount: '₦450,000',
+            details: 'Package delivered to Lekki Phase 1 gate'
+        },
+        {
+            id: 2,
+            type: 'review',
+            title: 'Review Posted',
+            description: 'You rated "Running Shoes Pro X" ⭐⭐⭐⭐⭐',
+            date: 'December 8, 2025',
+            time: '11:20 AM',
+            icon: 'star',
+            iconClass: 'icon-review',
+            details: '"Very comfortable. Perfect for morning jogs."'
+        },
+        {
+            id: 3,
+            type: 'shipped',
+            title: 'Order Shipped',
+            description: 'Smart Watch Series 5',
+            date: 'December 7, 2025',
+            time: '9:15 AM',
+            icon: 'truck',
+            iconClass: 'icon-shipped',
+            orderNumber: '#NG-ORD-8830',
+            amount: '₦620,000',
+            tracking: 'LAG-TRK-9384756',
+            details: 'Dispatch from Ikeja hub. ETA: 12–14 Dec'
+        },
+        {
+            id: 4,
+            type: 'order',
+            title: 'Order Placed',
+            description: 'Smart Watch Series 5 + Screen Protector',
+            date: 'December 5, 2025',
+            time: '6:45 PM',
+            icon: 'bag',
+            iconClass: 'icon-order',
+            orderNumber: '#NG-ORD-8830',
+            amount: '₦650,000',
+            items: 2
+        },
+        {
+            id: 5,
+            type: 'delivered',
+            title: 'Order Delivered',
+            description: 'Running Shoes Pro X',
+            date: 'December 3, 2025',
+            time: '1:22 PM',
+            icon: 'check',
+            iconClass: 'icon-delivered',
+            orderNumber: '#NG-ORD-8821',
+            amount: '₦210,000',
+            details: 'Received by: Tunde A.'
+        },
+        {
+            id: 6,
+            type: 'reward',
+            title: 'Reward Points Earned',
+            description: 'You earned 500 points from recent purchases',
+            date: 'December 1, 2025',
+            time: '12:00 PM',
+            icon: 'gift',
+            iconClass: 'icon-reward',
+            details: 'Total points: 2,450'
+        },
+        {
+            id: 7,
+            type: 'payment',
+            title: 'Payment Method Added',
+            description: 'Debit Card ending in 0921',
+            date: 'November 28, 2025',
+            time: '3:18 PM',
+            icon: 'card',
+            iconClass: 'icon-payment',
+            details: 'Set as default payment method'
+        },
+        {
+            id: 8,
+            type: 'address',
+            title: 'Shipping Address Updated',
+            description: 'New delivery address added',
+            date: 'November 25, 2025',
+            time: '10:05 AM',
+            icon: 'location',
+            iconClass: 'icon-address',
+            details: '15 Admiralty Way, Lekki Phase 1, Lagos'
+        },
+        {
+            id: 9,
+            type: 'delivered',
+            title: 'Order Delivered',
+            description: 'Coffee Maker Deluxe + Coffee Beans (2kg)',
+            date: 'November 20, 2025',
+            time: '4:50 PM',
+            icon: 'check',
+            iconClass: 'icon-delivered',
+            orderNumber: '#NG-ORD-8815',
+            amount: '₦285,000',
+            details: 'Dropped with estate security'
+        }
+    ];
 
     const icons = {
         check: '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
@@ -183,7 +131,6 @@ async function getUserData() {
         const timeline = document.getElementById('timeline');
         const emptyState = document.getElementById('emptyState');
         
-        // Check if elements exist
         if (!timeline || !emptyState) {
             console.error('Timeline elements not found');
             return;
@@ -263,14 +210,12 @@ async function getUserData() {
         const countShipped = document.getElementById('count-shipped');
         const countDelivered = document.getElementById('count-delivered');
         
-        // Check if elements exist before updating
         if (countAll) countAll.textContent = timelineData.length;
         if (countOrder) countOrder.textContent = timelineData.filter(i => i.type === 'order').length;
         if (countShipped) countShipped.textContent = timelineData.filter(i => i.type === 'shipped').length;
         if (countDelivered) countDelivered.textContent = timelineData.filter(i => i.type === 'delivered').length;
     }
 
-    // Filter button event listeners
     const filterButtons = document.querySelectorAll('.filter-btn');
     if (filterButtons.length > 0) {
         filterButtons.forEach(btn => {
@@ -284,11 +229,8 @@ async function getUserData() {
             });
         });
     }
-async function init() {
-    await getUserData(); // This now handles the DOM updates
+
     updateCounts();
     renderTimeline();
     console.log('Timeline initialized successfully');
-}
-init();
 });
