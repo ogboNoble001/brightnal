@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    /* ✅ USE CENTRALIZED USER UPDATE */
-    const userData = await UserUtil.updateUI(); // This handles all UI updates automatically
+    const userData = await UserUtil.updateUI();
     
     const timelineData = [
         {

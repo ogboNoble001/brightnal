@@ -4,7 +4,7 @@
         signedIn: true,
         stats: {
             purchases: 40,
-            bookmarks: 40,
+            bookmarks: 4,
             wishlist: 544,
             preOrders: 0,
             notifications: 5
@@ -240,11 +240,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
     
     window.openOverlay = function() {
-        if (cart) {
-            currentCartIndex += 3;
-            const cartDisplay = document.querySelector('.cartBtn_checkout').parentElement.querySelector('div');
-            if (cartDisplay) cartDisplay.textContent = currentCartIndex;
-        }
+        
         const overlay = document.querySelector('.overlay-div');
         const closeBtn = document.querySelector('.closeBtn');
         const input = document.querySelector('.searchInput');
