@@ -1,4 +1,3 @@
-// Configuration
 const API_BASE_URL = 'https://brightnal-backend.vercel.app';
 
 // State management
@@ -31,14 +30,12 @@ async function fetchProducts() {
         const data = await response.json();
         
         if (data.success && data.products) {
-            // Transform backend products to match frontend format
             items = data.products.map(product => ({
                 id: product.id,
                 type: 'img',
                 src: product.image_url,
-                color: generatePlaceholderColor(), // Generate a color for skeleton
-                h: Math.floor(Math.random() * 250) + 200, // Random height between 200-450
-                // Additional product data
+                color: generatePlaceholderColor(),
+                h: Math.floor(Math.random() * 250) + 200,
                 name: product.product_name,
                 price: product.price,
                 category: product.category,
@@ -58,51 +55,7 @@ async function fetchProducts() {
         }
     } catch (error) {
         console.error('❌ Error fetching products:', error);
-        // Return empty array on error - you might want to show an error message to users
         return [];
-    }
-}
-
-async function fetchProductById(id) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include'
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        if (data.success && data.product) {
-            return {
-                id: data.product.id,
-                type: 'img',
-                src: data.product.image_url,
-                color: generatePlaceholderColor(),
-                h: Math.floor(Math.random() * 250) + 200,
-                name: data.product.product_name,
-                price: data.product.price,
-                category: data.product.category,
-                brand: data.product.brand,
-                stock: data.product.stock,
-                sku: data.product.sku,
-                productClass: data.product.product_class,
-                sizes: data.product.sizes,
-                colors: data.product.colors,
-                description: data.product.description,
-                cloudinaryId: data.product.cloudinary_id
-            };
-        }
-        return null;
-    } catch (error) {
-        console.error('❌ Error fetching product:', error);
-        return null;
     }
 }
 
@@ -149,7 +102,6 @@ function createImageCard(item, template, overlaySelector, isRecommendation = fal
     const wrap = card.querySelector('.media-wrap');
     const img = card.querySelector('img.media');
     
-    // Add product ID to card for reference
     card.dataset.productId = item.id;
     
     const colorDiv = document.createElement('div');
@@ -201,7 +153,6 @@ function loadRecommendations(overlay, currentItem) {
     
     setTimeout(() => {
         skeletonContainer.style.display = 'none';
-        
         masonryContainer.style.display = 'block';
         masonryContainer.innerHTML = '';
         
@@ -223,19 +174,14 @@ function loadRecommendations(overlay, currentItem) {
 function showOverlay(item, overlaySelector, isFromRecommendation = false) {
     const overlay = getElement(overlaySelector || '.overlay-div');
     
-    let template = document.querySelector('.overlay-template');
-    
-    if (!template && overlay) {
-        template = overlay.querySelector('.overlay-template');
-    }
-    
     if (!overlay) {
         console.error('Overlay not found:', overlaySelector);
         return;
     }
     
+    const template = document.querySelector('.overlay-template');
     if (!template) {
-        console.error('Template .overlay-template not found in document or overlay');
+        console.error('Template .overlay-template not found');
         return;
     }
     
@@ -250,13 +196,7 @@ function showOverlay(item, overlaySelector, isFromRecommendation = false) {
     
     overlay.classList.add('active');
     overlay.scrollTop = 0;
-    
-    const existingContent = overlay.querySelector('.back-btn');
-    if (existingContent && existingContent.parentElement === overlay) {
-        while (overlay.firstChild) {
-            overlay.removeChild(overlay.firstChild);
-        }
-    }
+    overlay.innerHTML = '';
     
     const clone = template.content.cloneNode(true);
     
@@ -275,11 +215,15 @@ function showOverlay(item, overlaySelector, isFromRecommendation = false) {
         priceElement.textContent = formatPrice(item.price);
     }
     
-    // You can add more product details here if you want to show them in the overlay
-    // For example, add product name, description, etc.
+    // Add product name if you want (add to HTML template first)
+    const nameElement = clone.querySelector('.product-name');
+    if (nameElement && item.name) {
+        nameElement.textContent = item.name;
+    }
     
     overlay.appendChild(clone);
     
+    // Back button handler
     const backBtn = overlay.querySelector('.back-btn');
     if (backBtn) {
         backBtn.addEventListener('click', (e) => {
@@ -288,7 +232,8 @@ function showOverlay(item, overlaySelector, isFromRecommendation = false) {
         });
     }
     
-    const addToCartBtn = overlay.querySelector('.diff1');
+    // Add to cart button handler - using the "Add to cart" text button
+    const addToCartBtn = overlay.querySelector('.add_to_cart');
     if (addToCartBtn) {
         addToCartBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -296,12 +241,12 @@ function showOverlay(item, overlaySelector, isFromRecommendation = false) {
         });
     }
     
-    // Also add click handler to cart button in overlay
-    const cartBtn = overlay.querySelector('.cart-btn');
-    if (cartBtn) {
-        cartBtn.addEventListener('click', (e) => {
+    // Cart icon button handler in overlay header
+    const cartIconBtn = overlay.querySelector('.cart-btn');
+    if (cartIconBtn) {
+        cartIconBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            addToCart(item);
+            window.location.href = '/frontend/checkout/checkout.html';
         });
     }
     
@@ -324,6 +269,7 @@ function handleBackNavigation(overlay) {
         if (previousState && previousState.item && previousState.overlayHTML) {
             overlay.innerHTML = previousState.overlayHTML;
             
+            // Re-attach all event listeners
             const backBtn = overlay.querySelector('.back-btn');
             if (backBtn) {
                 backBtn.addEventListener('click', (e) => {
@@ -332,7 +278,7 @@ function handleBackNavigation(overlay) {
                 });
             }
             
-            const addToCartBtn = overlay.querySelector('.diff1');
+            const addToCartBtn = overlay.querySelector('.add_to_cart');
             if (addToCartBtn) {
                 addToCartBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -344,23 +290,9 @@ function handleBackNavigation(overlay) {
             if (cartBtn) {
                 cartBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    addToCart(previousState.item);
+                    window.location.href = '/frontend/checkout/checkout.html';
                 });
             }
-            
-            const recommendationCards = overlay.querySelectorAll('.recommendation-card');
-            recommendationCards.forEach(card => {
-                card.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const img = card.querySelector('img.media');
-                    if (img && img.src) {
-                        const clickedItem = items.find(item => img.src.includes(item.cloudinaryId || item.id));
-                        if (clickedItem) {
-                            showOverlay(clickedItem, '.overlay-div', true);
-                        }
-                    }
-                });
-            });
             
             requestAnimationFrame(() => {
                 overlay.scrollTop = previousState.scrollPosition || 0;
@@ -379,17 +311,13 @@ function handleBackNavigation(overlay) {
 function addToCart(item) {
     console.log('Adding to cart:', item);
     
-    // Get existing cart from localStorage
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
     
-    // Check if item already exists in cart
     const existingItemIndex = cart.findIndex(cartItem => cartItem.id === item.id);
     
     if (existingItemIndex > -1) {
-        // Increment quantity if item exists
         cart[existingItemIndex].quantity = (cart[existingItemIndex].quantity || 1) + 1;
     } else {
-        // Add new item with quantity 1
         cart.push({
             id: item.id,
             name: item.name,
@@ -400,13 +328,8 @@ function addToCart(item) {
         });
     }
     
-    // Save updated cart
     localStorage.setItem('cart', JSON.stringify(cart));
-    
-    // Update cart count in UI
     updateCartCount();
-    
-    // Show success feedback (you can customize this)
     showCartFeedback('Item added to cart!');
 }
 
@@ -414,15 +337,14 @@ function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
     
-    // Update cart badge if it exists
-    const cartBadges = document.querySelectorAll('.cart-btn');
-    cartBadges.forEach(badge => {
-        let countEl = badge.querySelector('.cart-count');
+    const cartButtons = document.querySelectorAll('.cart-btn, .cartBtn_checkout');
+    cartButtons.forEach(btn => {
+        let countEl = btn.querySelector('.cart-count');
         if (!countEl && totalItems > 0) {
             countEl = document.createElement('span');
             countEl.className = 'cart-count';
-            badge.style.position = 'relative';
-            badge.appendChild(countEl);
+            btn.style.position = 'relative';
+            btn.appendChild(countEl);
         }
         if (countEl) {
             countEl.textContent = totalItems;
@@ -432,11 +354,9 @@ function updateCartCount() {
 }
 
 function showCartFeedback(message) {
-    // Remove any existing feedback
     const existing = document.querySelector('.cart-feedback');
     if (existing) existing.remove();
     
-    // Create feedback element
     const feedback = document.createElement('div');
     feedback.className = 'cart-feedback';
     feedback.textContent = message;
@@ -450,11 +370,11 @@ function showCartFeedback(message) {
         border-radius: 8px;
         z-index: 10000;
         animation: slideIn 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     `;
     
     document.body.appendChild(feedback);
     
-    // Remove after 3 seconds
     setTimeout(() => {
         feedback.style.animation = 'slideOut 0.3s ease';
         setTimeout(() => feedback.remove(), 300);
@@ -537,18 +457,15 @@ async function initMasonry(config = {}) {
         return;
     }
     
-    // Show skeleton loading
     if (skeletonMasonry) {
         for (let i = 0; i < skeletonCount; i++) {
             skeletonMasonry.appendChild(createSkeletonCard());
         }
     }
     
-    // Fetch products from API
     const products = await fetchProducts();
     
     if (products.length === 0) {
-        // Show error message if no products loaded
         if (skeletonMasonry) {
             skeletonMasonry.style.display = 'none';
         }
@@ -569,7 +486,6 @@ async function initMasonry(config = {}) {
         return;
     }
     
-    // Hide skeleton and show products
     setTimeout(() => {
         if (skeletonMasonry) {
             skeletonMasonry.style.display = 'none';
@@ -598,10 +514,19 @@ document.addEventListener('DOMContentLoaded', () => {
         initMasonry();
         initNavigation();
         addNotificationIndicator();
-        updateCartCount(); // Initialize cart count on page load
+        updateCartCount();
+        
+        // Add click handler for floating checkout cart button
+        const checkoutCartBtn = document.querySelector('.cartBtn_checkout');
+        if (checkoutCartBtn) {
+            checkoutCartBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.location.href = '/frontend/checkout/checkout.html';
+            });
+        }
     }
     
-    // Add styles for cart feedback animation
+    // Add styles
     const style = document.createElement('style');
     style.textContent = `
         @keyframes slideIn {
@@ -645,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(style);
 });
 
-// Export functions for external use
+// Export functions
 window.MasonrySystem = {
     init: initMasonry,
     createCard: createImageCard,
@@ -654,7 +579,6 @@ window.MasonrySystem = {
     addIndicator: addNotificationIndicator,
     lazyLoad: initLazyLoading,
     fetchProducts: fetchProducts,
-    fetchProductById: fetchProductById,
     addToCart: addToCart,
     updateCartCount: updateCartCount
 };
