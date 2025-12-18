@@ -30,6 +30,7 @@ async function loadProducts() {
         
         if (!data.success) {
             return;
+            alert('Not working')
         }
         
         alert(`Products loaded successfully (${data.products.length})`);
@@ -37,10 +38,10 @@ async function loadProducts() {
         
     } catch (error) {
         console.error(error);
-        productList.textContent = "Error loading products";
+        alert('Not working')
     }
 }
-
+loadProducts()
 function getElement(selector) {
     if (typeof selector === 'string') {
         return document.querySelector(selector);
