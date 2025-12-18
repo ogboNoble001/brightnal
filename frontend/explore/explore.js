@@ -1,26 +1,11 @@
-const items = [
-    { type: 'img', src: '/frontend/res/04563643a2aa4c8997006ccb1b82e3b0.jpg', color: '#d7c2b9', h: 320 },
-    { type: 'img', src: '/frontend/res/05a7f184a8924a7eb00393d653b8c08f.jpg', color: '#8c6b4a', h: 400 },
-    { type: 'img', src: '/frontend/res/a307c6b8e07b4888842ad1571069f95c.jpg', color: '#f2d5b1', h: 360 },
-    { type: 'img', src: '/frontend/res/2e11750afa3341cf9a59fb05d3de7b2c.jpg', color: '#b99268', h: 300 },
-    { type: 'img', src: '/frontend/res/4ea7a7b89f6041a6a0a7858f6ce7c642.jpg', color: '#e6d7ce', h: 380 },
-    { type: 'img', src: '/frontend/res/692ac7b5ee67478d8e9a52045195cc46.jpg', color: '#3b3f33', h: 340 },
-    { type: 'img', src: '/frontend/res/ffdf19ab8c4c4e2a95c75643c0984530.jpg', color: '#d1c4b2', h: 400 },
-    { type: 'img', src: '/frontend/res/ac29955b829e4066941e64876de64dbb.jpg', color: '#f0e1d6', h: 360 },
-    { type: 'img', src: '/frontend/res/db440dbe8d884002a6b494fe6a5d4603.jpg', color: '#c2a27b', h: 320 },
-    { type: 'img', src: '/frontend/res/f3eb32d50e71427aaef1194c00e656eb.jpg', color: '#8c6b4a', h: 400 },
-    { type: 'img', src: '/frontend/res/ccaba25ea2b349f09f82a40b7bce17c5.jpg', color: '#f2d5b1', h: 360 },
-    { type: 'img', src: '/frontend/res/7ae120a7d27f4f5aa4d7d214d6a1c664.jpg', color: '#b99268', h: 300 },
-    { type: 'img', src: '/frontend/res/8ddea52712e7483784cb6071f01afcca.jpg', color: '#e6d7ce', h: 380 },
-    { type: 'img', src: '/frontend/res/57ec281b5850418c838edf053f8226ce.jpg', color: '#d7c2b9', h: 340 },
-    { type: 'img', src: '/frontend/res/fc9d81fada2b43fc86188cbfadf1f58e.jpg', color: '#8c6b4a', h: 320 },
-    { type: 'img', src: '/frontend/res/daebc7a49e1a435eaf87e1d4fa71e21a.jpg', color: '#f2d5b1', h: 400 },
-    { type: 'img', src: '/frontend/res/cbacc77b0a1343c3b0aa3a7a6eaa6163.jpg', color: '#b99268', h: 360 },
-    { type: 'img', src: '/frontend/res/2a01626af3fa4e788eddfba0fb65f378.jpg', color: '#e6d7ce', h: 300 }
-];
+// Configuration
+const API_BASE_URL = 'https://brightnal-backend.vercel.app';
 
+// State management
+let items = [];
 const navigationStack = [];
 
+// Utility Functions
 function getElement(selector) {
     if (typeof selector === 'string') {
         return document.querySelector(selector);
@@ -28,6 +13,118 @@ function getElement(selector) {
     return selector;
 }
 
+// API Functions
+async function fetchProducts() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/products`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.success && data.products) {
+            // Transform backend products to match frontend format
+            items = data.products.map(product => ({
+                id: product.id,
+                type: 'img',
+                src: product.image_url,
+                color: generatePlaceholderColor(), // Generate a color for skeleton
+                h: Math.floor(Math.random() * 250) + 200, // Random height between 200-450
+                // Additional product data
+                name: product.product_name,
+                price: product.price,
+                category: product.category,
+                brand: product.brand,
+                stock: product.stock,
+                sku: product.sku,
+                productClass: product.product_class,
+                sizes: product.sizes,
+                colors: product.colors,
+                description: product.description,
+                cloudinaryId: product.cloudinary_id
+            }));
+            
+            return items;
+        } else {
+            throw new Error('Invalid API response format');
+        }
+    } catch (error) {
+        console.error('❌ Error fetching products:', error);
+        // Return empty array on error - you might want to show an error message to users
+        return [];
+    }
+}
+
+async function fetchProductById(id) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.success && data.product) {
+            return {
+                id: data.product.id,
+                type: 'img',
+                src: data.product.image_url,
+                color: generatePlaceholderColor(),
+                h: Math.floor(Math.random() * 250) + 200,
+                name: data.product.product_name,
+                price: data.product.price,
+                category: data.product.category,
+                brand: data.product.brand,
+                stock: data.product.stock,
+                sku: data.product.sku,
+                productClass: data.product.product_class,
+                sizes: data.product.sizes,
+                colors: data.product.colors,
+                description: data.product.description,
+                cloudinaryId: data.product.cloudinary_id
+            };
+        }
+        return null;
+    } catch (error) {
+        console.error('❌ Error fetching product:', error);
+        return null;
+    }
+}
+
+// Helper function to generate placeholder colors
+function generatePlaceholderColor() {
+    const colors = [
+        '#d7c2b9', '#8c6b4a', '#f2d5b1', '#b99268', 
+        '#e6d7ce', '#3b3f33', '#d1c4b2', '#f0e1d6', 
+        '#c2a27b'
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+// Format price for display
+function formatPrice(price) {
+    return new Intl.NumberFormat('en-NG', {
+        style: 'currency',
+        currency: 'NGN'
+    }).format(price);
+}
+
+// Skeleton UI Functions
 function createSkeletonCard(isSmall = false) {
     const card = document.createElement('div');
     card.className = isSmall ? 'card skeleton small-skeleton' : 'card skeleton';
@@ -40,6 +137,7 @@ function createSkeletonCard(isSmall = false) {
     return card;
 }
 
+// Card Creation Functions
 function createImageCard(item, template, overlaySelector, isRecommendation = false) {
     const tpl = getElement(template);
     if (!tpl) {
@@ -51,6 +149,9 @@ function createImageCard(item, template, overlaySelector, isRecommendation = fal
     const wrap = card.querySelector('.media-wrap');
     const img = card.querySelector('img.media');
     
+    // Add product ID to card for reference
+    card.dataset.productId = item.id;
+    
     const colorDiv = document.createElement('div');
     colorDiv.className = 'color-tile';
     colorDiv.style.background = item.color;
@@ -59,6 +160,7 @@ function createImageCard(item, template, overlaySelector, isRecommendation = fal
     wrap.insertBefore(colorDiv, img);
     
     img.dataset.src = item.src;
+    img.alt = item.name || 'Product image';
     
     img.onload = () => {
         colorDiv.style.display = 'none';
@@ -77,8 +179,9 @@ function createImageCard(item, template, overlaySelector, isRecommendation = fal
     return card;
 }
 
+// Recommendations Functions
 function getRecommendations(currentItem, count = 6) {
-    const available = items.filter(item => item.src !== currentItem.src);
+    const available = items.filter(item => item.id !== currentItem.id);
     const shuffled = available.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
 }
@@ -116,6 +219,7 @@ function loadRecommendations(overlay, currentItem) {
     }, 800);
 }
 
+// Overlay Functions
 function showOverlay(item, overlaySelector, isFromRecommendation = false) {
     const overlay = getElement(overlaySelector || '.overlay-div');
     
@@ -156,11 +260,23 @@ function showOverlay(item, overlaySelector, isFromRecommendation = false) {
     
     const clone = template.content.cloneNode(true);
     
-    const mainImg = clone.querySelector("img");
+    // Set main image
+    const mainImg = clone.querySelector(".image-wrapper img");
     if (mainImg) {
         mainImg.src = item.src;
         mainImg.dataset.itemSrc = item.src;
+        mainImg.dataset.productId = item.id;
+        mainImg.alt = item.name || 'Product image';
     }
+    
+    // Update price
+    const priceElement = clone.querySelector('.premiumBtn');
+    if (priceElement && item.price) {
+        priceElement.textContent = formatPrice(item.price);
+    }
+    
+    // You can add more product details here if you want to show them in the overlay
+    // For example, add product name, description, etc.
     
     overlay.appendChild(clone);
     
@@ -176,7 +292,16 @@ function showOverlay(item, overlaySelector, isFromRecommendation = false) {
     if (addToCartBtn) {
         addToCartBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            console.log('Added to cart:', item);
+            addToCart(item);
+        });
+    }
+    
+    // Also add click handler to cart button in overlay
+    const cartBtn = overlay.querySelector('.cart-btn');
+    if (cartBtn) {
+        cartBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            addToCart(item);
         });
     }
     
@@ -187,8 +312,8 @@ function showOverlay(item, overlaySelector, isFromRecommendation = false) {
 
 function getCurrentItemFromOverlay(overlay) {
     const img = overlay.querySelector('.image-wrapper img');
-    if (img && img.dataset.itemSrc) {
-        return items.find(item => item.src === img.dataset.itemSrc);
+    if (img && img.dataset.productId) {
+        return items.find(item => item.id === parseInt(img.dataset.productId));
     }
     return null;
 }
@@ -211,7 +336,15 @@ function handleBackNavigation(overlay) {
             if (addToCartBtn) {
                 addToCartBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    console.log('Added to cart:', previousState.item);
+                    addToCart(previousState.item);
+                });
+            }
+            
+            const cartBtn = overlay.querySelector('.cart-btn');
+            if (cartBtn) {
+                cartBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    addToCart(previousState.item);
                 });
             }
             
@@ -221,7 +354,7 @@ function handleBackNavigation(overlay) {
                     e.stopPropagation();
                     const img = card.querySelector('img.media');
                     if (img && img.src) {
-                        const clickedItem = items.find(item => img.src.includes(item.src.split('/').pop()));
+                        const clickedItem = items.find(item => img.src.includes(item.cloudinaryId || item.id));
                         if (clickedItem) {
                             showOverlay(clickedItem, '.overlay-div', true);
                         }
@@ -242,10 +375,98 @@ function handleBackNavigation(overlay) {
     }
 }
 
+// Cart Functions
+function addToCart(item) {
+    console.log('Adding to cart:', item);
+    
+    // Get existing cart from localStorage
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    
+    // Check if item already exists in cart
+    const existingItemIndex = cart.findIndex(cartItem => cartItem.id === item.id);
+    
+    if (existingItemIndex > -1) {
+        // Increment quantity if item exists
+        cart[existingItemIndex].quantity = (cart[existingItemIndex].quantity || 1) + 1;
+    } else {
+        // Add new item with quantity 1
+        cart.push({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            image: item.src,
+            quantity: 1,
+            sku: item.sku
+        });
+    }
+    
+    // Save updated cart
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Update cart count in UI
+    updateCartCount();
+    
+    // Show success feedback (you can customize this)
+    showCartFeedback('Item added to cart!');
+}
+
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    
+    // Update cart badge if it exists
+    const cartBadges = document.querySelectorAll('.cart-btn');
+    cartBadges.forEach(badge => {
+        let countEl = badge.querySelector('.cart-count');
+        if (!countEl && totalItems > 0) {
+            countEl = document.createElement('span');
+            countEl.className = 'cart-count';
+            badge.style.position = 'relative';
+            badge.appendChild(countEl);
+        }
+        if (countEl) {
+            countEl.textContent = totalItems;
+            countEl.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+    });
+}
+
+function showCartFeedback(message) {
+    // Remove any existing feedback
+    const existing = document.querySelector('.cart-feedback');
+    if (existing) existing.remove();
+    
+    // Create feedback element
+    const feedback = document.createElement('div');
+    feedback.className = 'cart-feedback';
+    feedback.textContent = message;
+    feedback.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #000;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 8px;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(feedback);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        feedback.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => feedback.remove(), 300);
+    }, 3000);
+}
+
+// Animation Functions
 function fadeInCard(card, delay) {
     setTimeout(() => card.classList.add('loaded'), delay);
 }
 
+// Lazy Loading
 function initLazyLoading(container) {
     const containerEl = getElement(container);
     const lazyImgs = containerEl ? 
@@ -266,6 +487,7 @@ function initLazyLoading(container) {
     lazyImgs.forEach(img => io.observe(img));
 }
 
+// Navigation Functions
 function initNavigation(navSelector) {
     const navItems = document.querySelectorAll(navSelector || '.notchNavBar .notAligned');
     
@@ -293,16 +515,16 @@ function addNotificationIndicator(selector) {
     }
 }
 
-function initMasonry(config = {}) {
+// Main Masonry Initialization
+async function initMasonry(config = {}) {
     const {
         masonrySelector = '#masonry',
         skeletonSelector = '#skeletonMasonry',
         mainContentSelector = '#foryou',
         templateSelector = '#cardTpl',
         overlaySelector = '.overlay-div',
-        items: itemsData = items,
-        skeletonCount = 6,
-        skeletonDelay = 1000,
+        skeletonCount = 8,
+        skeletonDelay = 1500,
         fadeDelay = 100
     } = config;
     
@@ -315,12 +537,39 @@ function initMasonry(config = {}) {
         return;
     }
     
+    // Show skeleton loading
     if (skeletonMasonry) {
         for (let i = 0; i < skeletonCount; i++) {
             skeletonMasonry.appendChild(createSkeletonCard());
         }
     }
     
+    // Fetch products from API
+    const products = await fetchProducts();
+    
+    if (products.length === 0) {
+        // Show error message if no products loaded
+        if (skeletonMasonry) {
+            skeletonMasonry.style.display = 'none';
+        }
+        if (mainContent) {
+            mainContent.style.display = 'block';
+        }
+        
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'error-message';
+        errorMsg.textContent = 'Unable to load products. Please try again later.';
+        errorMsg.style.cssText = `
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-size: 16px;
+        `;
+        masonry.appendChild(errorMsg);
+        return;
+    }
+    
+    // Hide skeleton and show products
     setTimeout(() => {
         if (skeletonMasonry) {
             skeletonMasonry.style.display = 'none';
@@ -329,7 +578,7 @@ function initMasonry(config = {}) {
             mainContent.style.display = 'block';
         }
         
-        itemsData.forEach((item, index) => {
+        products.forEach((item, index) => {
             const card = createImageCard(item, templateSelector, overlaySelector, false);
             if (card) {
                 masonry.appendChild(card);
@@ -341,6 +590,7 @@ function initMasonry(config = {}) {
     }, skeletonDelay);
 }
 
+// Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
     const hasDefaultMasonry = document.querySelector('#masonry, .masonry');
     
@@ -348,14 +598,63 @@ document.addEventListener('DOMContentLoaded', () => {
         initMasonry();
         initNavigation();
         addNotificationIndicator();
+        updateCartCount(); // Initialize cart count on page load
     }
+    
+    // Add styles for cart feedback animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+    `;
+    document.head.appendChild(style);
 });
 
+// Export functions for external use
 window.MasonrySystem = {
     init: initMasonry,
     createCard: createImageCard,
     showOverlay: showOverlay,
     initNav: initNavigation,
     addIndicator: addNotificationIndicator,
-    lazyLoad: initLazyLoading
+    lazyLoad: initLazyLoading,
+    fetchProducts: fetchProducts,
+    fetchProductById: fetchProductById,
+    addToCart: addToCart,
+    updateCartCount: updateCartCount
 };
