@@ -35,7 +35,9 @@ async function loadProducts() {
             return;
         }
         
+        alert(`Products loaded successfully (${data.products.length})`);
         renderProducts(data.products);
+        
     } catch (error) {
         console.error(error);
         productList.textContent = "Error loading products";
