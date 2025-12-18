@@ -21,6 +21,27 @@ const items = [
 
 const navigationStack = [];
 
+const SERVER_URL = "https://brightnal.onrender.com";
+
+async function loadProducts() {
+    productList.innerHTML = "Loading products...";
+    
+    try {
+        const response = await fetch(`${SERVER_URL}/api/products`);
+        const data = await response.json();
+        
+        if (!data.success) {
+            productList.textContent = "Failed to load products";
+            return;
+        }
+        
+        renderProducts(data.products);
+    } catch (error) {
+        console.error(error);
+        productList.textContent = "Error loading products";
+    }
+}
+
 function getElement(selector) {
     if (typeof selector === 'string') {
         return document.querySelector(selector);
