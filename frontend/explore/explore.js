@@ -1,8 +1,9 @@
 const items = [];
-
 const navigationStack = [];
-
 const SERVER_URL = "https://brightnal.onrender.com";
+
+// Add a flag to track loading state
+let isDataLoaded = false;
 
 async function loadProducts() {
     try {
@@ -23,14 +24,21 @@ async function loadProducts() {
             });
         });
         
+        // Mark data as loaded
+        isDataLoaded = true;
+        
         // Re-init masonry AFTER data exists
         initMasonry({ items });
         
     } catch (error) {
         console.error(error);
+        isDataLoaded = true; // Still mark as loaded to hide skeletons
     }
 }
-loadProducts()
+
+// Start loading immediately
+loadProducts();
+
 function getElement(selector) {
     if (typeof selector === 'string') {
         return document.querySelector(selector);
@@ -312,7 +320,6 @@ function initMasonry(config = {}) {
         overlaySelector = '.overlay-div',
         items: itemsData = items,
         skeletonCount = 6,
-        skeletonDelay = 1000,
         fadeDelay = 100
     } = config;
     
@@ -325,37 +332,48 @@ function initMasonry(config = {}) {
         return;
     }
     
-    if (skeletonMasonry) {
+    // Only initialize skeletons if data hasn't loaded yet
+    if (!isDataLoaded && skeletonMasonry) {
+        skeletonMasonry.innerHTML = ''; // Clear any existing skeletons
         for (let i = 0; i < skeletonCount; i++) {
             skeletonMasonry.appendChild(createSkeletonCard());
         }
+        skeletonMasonry.style.display = 'block';
     }
     
-    setTimeout(() => {
-        if (skeletonMasonry) {
-            skeletonMasonry.style.display = 'none';
+    // Wait for data to be loaded before showing real content
+    if (!isDataLoaded) {
+        // Data not loaded yet, wait for it
+        return;
+    }
+    
+    // Data is loaded, hide skeletons and show real content
+    if (skeletonMasonry) {
+        skeletonMasonry.style.display = 'none';
+    }
+    if (mainContent) {
+        mainContent.style.display = 'block';
+    }
+    
+    // Clear masonry and add real cards
+    masonry.innerHTML = '';
+    itemsData.forEach((item, index) => {
+        const card = createImageCard(item, templateSelector, overlaySelector, false);
+        if (card) {
+            masonry.appendChild(card);
+            fadeInCard(card, index * fadeDelay);
         }
-        if (mainContent) {
-            mainContent.style.display = 'block';
-        }
-        
-        itemsData.forEach((item, index) => {
-            const card = createImageCard(item, templateSelector, overlaySelector, false);
-            if (card) {
-                masonry.appendChild(card);
-                fadeInCard(card, index * fadeDelay);
-            }
-        });
-        
-        initLazyLoading(masonry);
-    }, skeletonDelay);
+    });
+    
+    initLazyLoading(masonry);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const hasDefaultMasonry = document.querySelector('#masonry, .masonry');
     
     if (hasDefaultMasonry) {
-        
+        // Show skeletons immediately
+        initMasonry({ items: [] });
         initNavigation();
         addNotificationIndicator();
     }
