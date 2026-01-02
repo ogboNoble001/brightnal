@@ -12,10 +12,12 @@ body {
 
 /* Masonry Grid */
 .masonry-container {
-    padding-top: 1.4em;
-    column-count: 2;
+    padding: 1.2em;
+    column-count: 3;
     column-gap: 15px;
 }
+
+
 
 .masonry-item {
     break-inside: avoid;
@@ -171,9 +173,8 @@ body {
 /* Media Queries */
 @media (min-width: 640px) {
     .masonry-container {
-        column-count: 3;
+        column-count: 5;
         column-gap: 12px;
-        padding: 80px 12px 20px;
     }
 
     .masonry-item {
@@ -183,9 +184,8 @@ body {
 
 @media (min-width: 1024px) {
     .masonry-container {
-        column-count: 3;
+        column-count: 5;
         column-gap: 16px;
-        padding: 80px 16px 20px;
     }
 
     .masonry-item {

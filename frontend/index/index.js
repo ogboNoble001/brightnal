@@ -19,6 +19,49 @@ window.onload = () => {
     lucide.createIcons();
   }
   
+const container = document.querySelector('.masonry-container');
+const originals = Array.from(container.children);
+const MIN_DISTANCE = 14;
+const TARGET_COUNT = 75;
+
+function shuffleWithDistance(items, minDistance) {
+    const result = [];
+
+    while (result.length < items.length) {
+        const available = items.filter(item => {
+            const lastIndex = result.lastIndexOf(item);
+            return lastIndex === -1 || result.length - lastIndex > minDistance;
+        });
+
+        if (!available.length) {
+            result.length = 0;
+            continue;
+        }
+
+        const pick = available[Math.floor(Math.random() * available.length)];
+        result.push(pick);
+    }
+
+    return result;
+}
+
+const pool = [];
+while (pool.length < TARGET_COUNT) {
+    pool.push(...originals);
+}
+
+const trimmedPool = pool.slice(0, TARGET_COUNT);
+const shuffled = shuffleWithDistance(trimmedPool, MIN_DISTANCE);
+
+container.innerHTML = '';
+
+shuffled.forEach((item, i) => {
+    const clone = item.cloneNode(true);
+    clone.dataset.aosDelay = (i % 6) * 100;
+    container.appendChild(clone);
+});
+
+
   document.getElementById('overlay').style.transition = 'opacity 0.3s ease';
   
   const viewMore = document.querySelector('.view-more');
