@@ -64,7 +64,7 @@ function getElement(selector) {
     spinner.style.cssText = `
         width: 30px;
         height: 30px;
-        margin-top:5em;
+        margin-top: 19em;
         border: 4px solid #f3f3f3;
         border-top: 2px solid #000;
         border-radius: 50%;

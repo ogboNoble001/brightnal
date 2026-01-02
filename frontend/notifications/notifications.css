@@ -68,3 +68,7 @@ section.main-section .mainTxt{
 .asideIcns > *.active{
         
 }
+.text-muter{
+    color: grey !important;
+    font-weight: normal;
+}
