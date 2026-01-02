@@ -1,5 +1,10 @@
-  body{
+body{
       position: relative;
+      background: 
+        radial-gradient(circle, rgba(0, 0, 0, 0.05) 1.5px, transparent 1.5px);
+    background-size: 30px 30px;
+    background-position: 0 0;
+    background-attachment: fixed;
   }
   #foryou {
             padding: 20px;
@@ -54,41 +59,6 @@
             #masonry {
                 column-count: 4;
             }
-        }
-
-        /* Skeleton Loading */
-        #skeletonMasonry {
-            padding: 20px;
-            column-count: 2;
-            column-gap: 14px;
-        }
-
-        @media (min-width: 700px) {
-            #skeletonMasonry {
-                column-count: 3;
-            }
-        }
-
-        @media (min-width: 1050px) {
-            #skeletonMasonry {
-                column-count: 4;
-            }
-        }
-
-        .card.skeleton {
-            width: 100%;
-            height: var(--sk-height);
-            margin-bottom: 14px;
-            border-radius: 16px;
-            background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            opacity: 1;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
         }
 
 .back-btn, .cart-btn {
