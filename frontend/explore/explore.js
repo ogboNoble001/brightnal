@@ -50,10 +50,38 @@ function createSkeletonCard(isSmall = false) {
     const card = document.createElement('div');
     card.className = isSmall ? 'card skeleton small-skeleton' : 'card skeleton';
     
-    const randomHeight = isSmall ? 
-        Math.floor(Math.random() * 150) + 100 : 
+    // Deep, dark saturated colors
+    const colors = [
+        '#1a0b2e', // Deep midnight purple
+        '#16003b', // Dark violet
+        '#0d1b2a', // Dark navy blue
+        '#1b263b', // Deep blue-gray
+        '#0f1419', // Almost black blue
+        '#2d1b2e', // Deep plum
+        '#1f0318', // Dark crimson
+        '#220901', // Deep burgundy
+        '#310b0b', // Dark wine red
+        '#1a1423', // Deep purple-black
+        '#0b2027', // Deep teal-black
+        '#050517', // Almost black purple
+        '#0f0a1e', // Deep indigo
+        '#1c0a2b', // Dark royal purple
+        '#0b192e', // Deep ocean blue
+        '#2b1a1f', // Dark rose-black
+        '#1a0f1e', // Deep mauve
+        '#0a1c2b', // Deep sapphire
+        '#1e0b1b', // Dark magenta
+        '#0e1a1e' // Deep slate
+    ];
+    
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    const randomHeight = isSmall ?
+        Math.floor(Math.random() * 150) + 100 :
         Math.floor(Math.random() * 350) + 150;
-    card.style.setProperty('--sk-height', randomHeight + 'px');
+    
+    card.style.background = randomColor;
+    card.style.height = randomHeight + 'px';
+    card.style.borderRadius = '12px';
     
     return card;
 }
