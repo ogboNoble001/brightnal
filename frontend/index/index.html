@@ -119,8 +119,38 @@
             </div>
         </div>
     </div>
-
+<div id="g_id_onload"
+     data-client_id="81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com"
+     data-callback="handleCredentialResponse"
+     data-auto_prompt="false">
+</div>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="/frontend/index/index.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+function handleCredentialResponse(response) {
+    // Send the Google JWT token to your backend
+    fetch("https://brightnal.onrender.com/api/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: response.credential })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            console.log("User logged in:", data.user);
+            // TODO: save user info or JWT in localStorage/session
+        } else {
+            console.error("Login failed:", data.message);
+        }
+    })
+    .catch(err => console.error(err));
+}
+
+// Trigger Google sign-in on your button click
+document.querySelector(".btn-google").addEventListener("click", () => {
+    google.accounts.id.prompt(); // show Google sign-in popup
+});
+</script>
 </body>
 </html>
