@@ -1,39 +1,39 @@
 window.onload = () => {
-    const overlay_jwt = document.getElementById('overlay_jwt');
-const token = localStorage.getItem("jwtToken");
-
-if (token) {
-  // show overlay while verifying
-  overlay_jwt.classList.remove('hidden_jwt');
+  const overlay_jwt = document.getElementById('overlay_jwt');
+  const token = localStorage.getItem("jwtToken");
   
-  fetch("https://brightnal.onrender.com/api/verify-token", {
-      method: "POST",
-      headers: { "Authorization": `Bearer ${token}` }
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        // ✅ replace the login page in history
-        window.location.replace("/explore");
-      } else {
+  if (token) {
+    // show overlay while verifying
+    overlay_jwt.classList.remove('hidden_jwt');
+    
+    fetch("https://brightnal.onrender.com/api/verify-token", {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${token}` }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          // ✅ replace the login page in history
+          window.location.replace("/explore");
+        } else {
+          overlay_jwt.classList.add('hidden_jwt');
+          localStorage.removeItem("jwtToken");
+          localStorage.removeItem("user");
+        }
+      })
+      .catch(err => {
+        console.error("JWT verification error:", err);
         overlay_jwt.classList.add('hidden_jwt');
-        localStorage.removeItem("jwtToken");
-        localStorage.removeItem("user");
-      }
-    })
-    .catch(err => {
-      console.error("JWT verification error:", err);
-      overlay_jwt.classList.add('hidden_jwt');
-    });
-  
-} else {
-  // no token → hide overlay immediately
-  overlay_jwt.classList.add('hidden_jwt');
-}
-  const exploreBtn= document.querySelector('.exploreBtn')
+      });
+    
+  } else {
+    // no token → hide overlay immediately
+    overlay_jwt.classList.add('hidden_jwt');
+  }
+  const exploreBtn = document.querySelector('.exploreBtn')
   if (exploreBtn) {
-    exploreBtn.addEventListener('click', ()=>{
-      window.location.href='./explore'
+    exploreBtn.addEventListener('click', () => {
+      window.location.href = './explore'
     })
   }
   if (typeof AOS !== "undefined") {
@@ -50,49 +50,49 @@ if (token) {
     lucide.createIcons();
   }
   
-const container = document.querySelector('.masonry-container');
-const originals = Array.from(container.children);
-const MIN_DISTANCE = 14;
-const TARGET_COUNT = 75;
-
-function shuffleWithDistance(items, minDistance) {
+  const container = document.querySelector('.masonry-container');
+  const originals = Array.from(container.children);
+  const MIN_DISTANCE = 14;
+  const TARGET_COUNT = 75;
+  
+  function shuffleWithDistance(items, minDistance) {
     const result = [];
-
+    
     while (result.length < items.length) {
-        const available = items.filter(item => {
-            const lastIndex = result.lastIndexOf(item);
-            return lastIndex === -1 || result.length - lastIndex > minDistance;
-        });
-
-        if (!available.length) {
-            result.length = 0;
-            continue;
-        }
-
-        const pick = available[Math.floor(Math.random() * available.length)];
-        result.push(pick);
+      const available = items.filter(item => {
+        const lastIndex = result.lastIndexOf(item);
+        return lastIndex === -1 || result.length - lastIndex > minDistance;
+      });
+      
+      if (!available.length) {
+        result.length = 0;
+        continue;
+      }
+      
+      const pick = available[Math.floor(Math.random() * available.length)];
+      result.push(pick);
     }
-
+    
     return result;
-}
-
-const pool = [];
-while (pool.length < TARGET_COUNT) {
+  }
+  
+  const pool = [];
+  while (pool.length < TARGET_COUNT) {
     pool.push(...originals);
-}
-
-const trimmedPool = pool.slice(0, TARGET_COUNT);
-const shuffled = shuffleWithDistance(trimmedPool, MIN_DISTANCE);
-
-container.innerHTML = '';
-
-shuffled.forEach((item, i) => {
+  }
+  
+  const trimmedPool = pool.slice(0, TARGET_COUNT);
+  const shuffled = shuffleWithDistance(trimmedPool, MIN_DISTANCE);
+  
+  container.innerHTML = '';
+  
+  shuffled.forEach((item, i) => {
     const clone = item.cloneNode(true);
     clone.dataset.aosDelay = (i % 6) * 100;
     container.appendChild(clone);
-});
-
-
+  });
+  
+  
   document.getElementById('overlay').style.transition = 'opacity 0.3s ease';
   
   const viewMore = document.querySelector('.view-more');
