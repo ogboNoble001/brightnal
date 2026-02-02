@@ -126,35 +126,41 @@
     <script src="/frontend/index/index.js"></script>
 
 <script>
-    function handleCredentialResponse(response) {
-        fetch("https://brightnal.onrender.com/api/auth/google", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token: response.credential })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    localStorage.setItem("jwtToken", data.token);
-                    localStorage.setItem("user", JSON.stringify(data.user));
-                    window.location.href = "/explore";
-                } else {
-                    console.error(data.message);
-                }
-            })
-            .catch(console.error);
-    }
-    
-    // ✅ REQUIRED
-    google.accounts.id.initialize({
-        client_id: "81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com",
-        callback: handleCredentialResponse,
-        auto_select: false
-    });
-    
-    // ✅ User gesture
-    document.querySelector(".btn-google").addEventListener("click", () => {
-        google.accounts.id.prompt();
+    document.addEventListener("DOMContentLoaded", () => {
+        
+        function handleCredentialResponse(response) {
+            fetch("https://brightnal.onrender.com/api/auth/google", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ token: response.credential })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        localStorage.setItem("jwtToken", data.token);
+                        localStorage.setItem("user", JSON.stringify(data.user));
+                        window.location.href = "/explore";
+                    } else {
+                        console.error(data.message);
+                    }
+                })
+                .catch(console.error);
+        }
+        
+        google.accounts.id.initialize({
+            client_id: "81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com",
+            callback: handleCredentialResponse,
+            auto_select: false
+        });
+        
+        const googleBtn = document.querySelector(".btn-google");
+        if (googleBtn) {
+            googleBtn.addEventListener("click", () => {
+                google.accounts.id.prompt();
+            });
+        } else {
+            console.error("Google button not found in DOM");
+        }
     });
 </script>
 </body>
