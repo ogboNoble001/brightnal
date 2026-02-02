@@ -1,9 +1,9 @@
 // Google Sign-In Implementation for Brightnal
-// Only uses the One Tap dialog (the clean slide-in prompt)
+// Add this script to your frontend
 
 // Configuration
-const BACKEND_URL = 'https://brightnal-backend.vercel.app';
-const GOOGLE_CLIENT_ID = '81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com';
+const BACKEND_URL = 'https://brightnal-backend.vercel.app'; // Update with your backend URL
+const GOOGLE_CLIENT_ID = '81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com'; // Replace with your actual Google Client ID
 
 // Initialize Google Sign-In
 function initializeGoogleSignIn() {
@@ -35,20 +35,45 @@ function setupGoogleButton() {
     });
 }
 
-// Handle Google Sign-In - ONLY One Tap dialog
+// Handle Google Sign-In
 function handleGoogleSignIn() {
     // Initialize Google Sign-In with callback
     google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: handleGoogleResponse,
         auto_select: false,
-        cancel_on_tap_outside: true,
-        ux_mode: 'popup', // This shows the clean One Tap dialog
-        context: 'signin'
+        cancel_on_tap_outside: true
     });
 
-    // Show the One Tap dialog
-    google.accounts.id.prompt();
+    // Prompt the user to sign in
+    google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            // Fallback: show the One Tap dialog
+            console.log('Prompt not displayed, showing popup');
+            showGooglePopup();
+        }
+    });
+}
+
+// Alternative: Show Google popup for sign-in
+function showGooglePopup() {
+    google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleResponse,
+    });
+
+    // This will show a popup window
+    const client = google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: 'email profile',
+        callback: async (response) => {
+            if (response.access_token) {
+                await verifyGoogleToken(response.access_token);
+            }
+        },
+    });
+    
+    client.requestAccessToken();
 }
 
 // Handle the Google response (ID token)
@@ -183,6 +208,9 @@ function showSuccess(user) {
 }
 
 function showError(message) {
+    const overlay = document.getElementById('overlay');
+    const overlayContent = overlay.querySelector('.overlay-content');
+    
     // Create error notification
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-notification';
@@ -231,7 +259,7 @@ function logout() {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
     google.accounts.id.disableAutoSelect();
-    window.location.href = '/'; // Redirect to home
+    window.location.href = '/index.html'; // Redirect to home
 }
 
 // Protected page check
@@ -239,14 +267,14 @@ function requireAuth() {
     const token = localStorage.getItem('auth_token');
     
     if (!token) {
-        window.location.href = '/';
+        window.location.href = '/index.html';
         return false;
     }
     
     // Optionally verify token with backend
     verifyExistingToken().then(isValid => {
         if (!isValid) {
-            window.location.href = '/';
+            window.location.href = '/index.html';
         }
     });
     
@@ -266,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isLoggedIn) {
             console.log('✅ User already logged in');
             // Optionally redirect or update UI
-            // window.location.href = '/dashboard';
+            // window.location.href = '/dashboard.html';
         } else {
             // Initialize Google Sign-In
             initializeGoogleSignIn();
