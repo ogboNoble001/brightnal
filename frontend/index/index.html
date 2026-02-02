@@ -125,9 +125,51 @@
      data-callback="handleCredentialResponse"
      data-auto_prompt="false">
 </div>
-    <!-- ✅ Load scripts in correct order -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="/frontend/index/index.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+    function handleCredentialResponse(response) {
+        fetch("https://brightnal.onrender.com/api/auth/google", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token: response.credential })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem("jwtToken", data.token);
+                    localStorage.setItem("user", JSON.stringify(data.user));
+                    window.location.href = "/explore";
+                } else {
+                    console.error("Login failed:", data.message);
+                }
+            })
+            .catch(err => console.error(err));
+    }
+    
+    // ✅ Wait for Google library to load before attaching event listener
+    window.addEventListener('load', function() {
+        // Give Google library extra time to initialize
+        setTimeout(() => {
+            if (typeof google !== 'undefined' && google.accounts) {
+                google.accounts.id.initialize({
+                    client_id: "81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com",
+                    callback: handleCredentialResponse,
+                    auto_select: false
+                });
+                
+                const googleBtn = document.querySelector(".btn-google");
+                if (googleBtn) {
+                    googleBtn.addEventListener("click", () => {
+                        google.accounts.id.prompt();
+                    });
+                }
+            } else {
+                console.error("Google Identity Services not loaded");
+            }
+        }, 100); // Small delay to ensure library is ready
+    });
+</script>
 </body>
 </html>
