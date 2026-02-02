@@ -128,6 +128,31 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="/frontend/index/index.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-
+<script>
+    function handleCredentialResponse(response) {
+        // Send the Google JWT token to your backend
+        fetch("https://brightnal.onrender.com/api/auth/google", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ token: response.credential })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem("jwtToken", data.token); // store JWT
+                    localStorage.setItem("user", JSON.stringify(data.user)); // store user info
+                    window.location.href="/explore"; // redirect to explore page
+                } else {
+                    console.error("Login failed:", data.message);
+                }
+            })
+            .catch(err => console.error(err));
+    }
+    
+    // Trigger Google sign-in on your button click
+    document.querySelector(".btn-google").addEventListener("click", () => {
+        google.accounts.id.prompt(); // show Google sign-in popup
+    });
+</script>
 </body>
 </html>
