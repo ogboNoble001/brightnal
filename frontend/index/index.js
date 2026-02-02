@@ -1,25 +1,34 @@
 window.onload = () => {
-  const token = localStorage.getItem("jwtToken");
-
+    const overlay_jwt = document.getElementById('overlay_jwt');
+    const token = localStorage.getItem("jwtToken");
     if (token) {
-        // Verify JWT with backend
-        fetch("https://brightnal.onrender.com/api/verify-token", {
-            method: "POST",
-            headers: { "Authorization": `Bearer ${token}` }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                console.log("User verified:", data.user);
-          window.location.href = "/explore";
-            } else {
-                console.log("Token expired or invalid");
-                localStorage.removeItem("jwtToken");
-                localStorage.removeItem("user");
-            }
-        })
-        .catch(err => console.error("JWT verification error:", err));
-    }
+  // Show overlay while verifying
+  overlay_jwt.classList.remove('hidden_jwt');
+  
+  fetch("https://brightnal.onrender.com/api/verify-token", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${token}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        // Verified → redirect
+        window.location.href = "/explore";
+      } else {
+        // Invalid token → hide overlay
+        overlay_jwt.classList.add('hidden_jwt');
+        localStorage.removeItem("jwtToken");
+        localStorage.removeItem("user");
+      }
+    })
+    .catch(err => {
+      console.error("JWT verification error:", err);
+      overlay_jwt.classList.add('hidden_jwt');
+    });
+} else {
+  // No token → hide overlay immediately
+  overlay_jwt.classList.add('hidden_jwt');
+}
   const exploreBtn= document.querySelector('.exploreBtn')
   if (exploreBtn) {
     exploreBtn.addEventListener('click', ()=>{
