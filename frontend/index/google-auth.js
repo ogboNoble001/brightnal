@@ -3,7 +3,7 @@
 
 // Configuration
 const BACKEND_URL = 'https://brightnal-backend.vercel.app'; // Update with your backend URL
-const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID_HERE'; // Replace with your actual Google Client ID
+const GOOGLE_CLIENT_ID = '81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com'; // Replace with your actual Google Client ID
 
 // Initialize Google Sign-In
 function initializeGoogleSignIn() {
