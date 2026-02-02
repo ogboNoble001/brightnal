@@ -1,4 +1,26 @@
 window.onload = () => {
+  const token = localStorage.getItem("jwtToken");
+
+    if (token) {
+        // Verify JWT with backend
+        fetch("https://brightnal.onrender.com/api/verify-token", {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${token}` }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                console.log("User verified:", data.user);
+                // You can auto-redirect or show the user dashboard here
+                // window.location.href = "/explore";
+            } else {
+                console.log("Token expired or invalid");
+                localStorage.removeItem("jwtToken");
+                localStorage.removeItem("user");
+            }
+        })
+        .catch(err => console.error("JWT verification error:", err));
+    }
   const exploreBtn= document.querySelector('.exploreBtn')
   if (exploreBtn) {
     exploreBtn.addEventListener('click', ()=>{
