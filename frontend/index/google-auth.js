@@ -37,18 +37,44 @@ function setupGoogleButton() {
 
 // Handle Google Sign-In
 function handleGoogleSignIn() {
+    // Initialize Google Sign-In with callback
     google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: handleGoogleResponse,
         auto_select: false,
         cancel_on_tap_outside: true
     });
-    
-    // Show the One Tap / drawer
-    google.accounts.id.prompt();
+
+    // Prompt the user to sign in
+    google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            // Fallback: show the One Tap dialog
+            console.log('Prompt not displayed, showing popup');
+            showGooglePopup();
+        }
+    });
 }
 
 // Alternative: Show Google popup for sign-in
+function showGooglePopup() {
+    google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleResponse,
+    });
+
+    // This will show a popup window
+    const client = google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: 'email profile',
+        callback: async (response) => {
+            if (response.access_token) {
+                await verifyGoogleToken(response.access_token);
+            }
+        },
+    });
+    
+    client.requestAccessToken();
+}
 
 // Handle the Google response (ID token)
 async function handleGoogleResponse(response) {
@@ -275,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
 // Export functions for use in other scripts
 window.BrightnalAuth = {
     logout,
