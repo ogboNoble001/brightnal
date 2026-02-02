@@ -11,8 +11,7 @@ window.onload = () => {
         .then(data => {
             if (data.success) {
                 console.log("User verified:", data.user);
-                // You can auto-redirect or show the user dashboard here
-                // window.location.href = "/explore";
+          window.location.href = "/explore";
             } else {
                 console.log("Token expired or invalid");
                 localStorage.removeItem("jwtToken");
