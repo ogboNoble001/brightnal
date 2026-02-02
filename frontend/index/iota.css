@@ -216,24 +216,3 @@ a{
 .view-svg{
     margin-bottom: .2em;
 }
-
-.overlay_jwt{
-    position: fixed;       /* stay in place even when scrolling */
-  top: 0;                /* start from top */
-  left: 0;               /* start from left */
-  width: 100%;           /* full width */
-  height: 100%;          /* full height */
-  background-color: #000; /* solid black */
-  opacity: 1;            /* fully visible */
-  z-index: 999999;         /* on top of everything */
-  display: flex;         /* center content if any */
-  justify-content: center;
-  align-items: center;
-  transition: opacity 0.3s ease; /* smooth fade if hidden later */
-}
-
-.hidden_jwt {
-  opacity: 0;
-
-  pointer-events: none;
-}
