@@ -77,7 +77,11 @@ function getElement(selector) {
     loaderText.textContent = 'loading...';
     loaderText.style.cssText = `
         font-size: 16px;
-        color: #666;
+        color: #ffffff;
+        padding: .4em 1.2em;
+        border-radius: 22px;
+        opacity: .6;
+        background-color: #666;
         margin: 0;
         text-align: center;
         white-space: nowrap;
