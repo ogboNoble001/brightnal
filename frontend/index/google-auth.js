@@ -111,7 +111,7 @@ async function handleGoogleResponse(response) {
             
             // Redirect after 1.5 seconds
             setTimeout(() => {
-                window.location.href = '/dashboard.html'; // Update with your redirect URL
+                window.location.href = '/explore'; // Update with your redirect URL
             }, 1500);
         } else {
             showError(data.message || 'Authentication failed');
