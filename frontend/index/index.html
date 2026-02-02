@@ -150,9 +150,17 @@
     }
     
     // Trigger Google sign-in on your button click
-    document.querySelector(".btn-google").addEventListener("click", () => {
-        google.accounts.id.prompt(); // show Google sign-in popup
-    });
+    // Initialize Google Identity Services
+google.accounts.id.initialize({
+    client_id: "81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com",
+    callback: handleCredentialResponse,
+    auto_select: false
+});
+
+// Attach Google login popup to your button
+document.querySelector(".btn-google").addEventListener("click", () => {
+    google.accounts.id.prompt(); // this will now show the popup correctly
+});
 </script>
 </body>
 </html>
