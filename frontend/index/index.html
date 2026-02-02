@@ -141,7 +141,7 @@
                 if (data.success) {
                     localStorage.setItem("jwtToken", data.token); // store JWT
                     localStorage.setItem("user", JSON.stringify(data.user)); // store user info
-                    window.location.href("/explore"); // redirect to explore page
+                    window.location.href="/explore"; // redirect to explore page
                 } else {
                     console.error("Login failed:", data.message);
                 }
