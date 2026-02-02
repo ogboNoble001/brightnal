@@ -1,8 +1,9 @@
 window.onload = () => {
     const overlay_jwt = document.getElementById('overlay_jwt');
-    const token = localStorage.getItem("jwtToken");
-    if (token) {
-  // Show overlay while verifying
+const token = localStorage.getItem("jwtToken");
+
+if (token) {
+  // show overlay while verifying
   overlay_jwt.classList.remove('hidden_jwt');
   
   fetch("https://brightnal.onrender.com/api/verify-token", {
@@ -12,10 +13,9 @@ window.onload = () => {
     .then(res => res.json())
     .then(data => {
       if (data.success) {
-        // Verified → redirect
-        window.location.href = "/explore";
+        // ✅ replace the login page in history
+        window.location.replace("/explore");
       } else {
-        // Invalid token → hide overlay
         overlay_jwt.classList.add('hidden_jwt');
         localStorage.removeItem("jwtToken");
         localStorage.removeItem("user");
@@ -25,8 +25,9 @@ window.onload = () => {
       console.error("JWT verification error:", err);
       overlay_jwt.classList.add('hidden_jwt');
     });
+  
 } else {
-  // No token → hide overlay immediately
+  // no token → hide overlay immediately
   overlay_jwt.classList.add('hidden_jwt');
 }
   const exploreBtn= document.querySelector('.exploreBtn')
