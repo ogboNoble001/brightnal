@@ -8,17 +8,31 @@
     <link rel="stylesheet" href="/frontend/index/iota.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="/frontend/util/CSS_STYLESHEETS/util_main.css">
-    
-    <!-- Google Identity Services -->
+
+    <!-- ✅ Required: Tells Google which client to use for One Tap -->
+    <meta name="google-signin-client_id" content="81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com">
+
+    <!-- ✅ Google Identity Services — loaded early, synchronously so it's ready -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
+
+    <!-- ✅ Google One Tap renders itself into this div automatically -->
+    <div id="g_id_onload"
+         data-client_id="81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com"
+         data-callback="handleGoogleResponse"
+         data-auto_select="false"
+         data-cancel_on_tap_outside="true"
+         data-context="signup"
+         data-itp_support="true">
+    </div>
+
     <div class="overlay_jwt" id="overlay_jwt"></div>
-    
+
     <div class="view-more diff1 notAligned">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="view-svg lucide lucide-chevron-down-icon lucide-chevron-down">
             <path d="m6 9 6 6 6-6"/>
-        </svg>  
+        </svg>
         View more
     </div>
 
@@ -97,10 +111,11 @@
     <!-- Sign-in/Sign-up Overlay -->
     <div class="overlay" id="overlay">
         <div class="overlay-content">
-            <h1>Dress</h1> 
-            <h2>Like a <span>boss</span></h2> 
+            <h1>Dress</h1>
+            <h2>Like a <span>boss</span></h2>
             <button class="btn-primary exploreBtn">Shop now</button>
 
+            <!-- ✅ This button triggers Google One Tap prompt on click -->
             <button class="btn-google" id="googleSignInBtn">
                 <svg class="google-icon" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -126,12 +141,9 @@
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="/frontend/index/index.js"></script>
-    
-    <!-- Google Authentication Script -->
     <script src="/frontend/index/google-auth.js"></script>
-    
+
     <script>
-        // Initialize AOS animations
         AOS.init();
     </script>
 </body>

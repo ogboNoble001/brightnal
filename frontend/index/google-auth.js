@@ -1,311 +1,272 @@
 // Google Sign-In Implementation for Brightnal
-// Add this script to your frontend
+// Uses Google One Tap — the native on-page sign-in prompt, no tabs or custom modals
 
-// Configuration
-const BACKEND_URL = 'https://brightnal-backend.vercel.app'; // Update with your backend URL
-const GOOGLE_CLIENT_ID = '81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com'; // Replace with your actual Google Client ID
+const BACKEND_URL = 'https://brightnal-backend.vercel.app';
+const GOOGLE_CLIENT_ID = '81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com';
 
-// Initialize Google Sign-In
+// ─── Initialize One Tap ────────────────────────────────────────────────────────
 function initializeGoogleSignIn() {
-    // Load Google Identity Services script
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-
-    script.onload = () => {
-        console.log('✅ Google Identity Services loaded');
-        setupGoogleButton();
-    };
-}
-
-// Setup Google Sign-In button
-function setupGoogleButton() {
-    const googleBtn = document.querySelector('.btn-google');
-    
-    if (!googleBtn) {
-        console.error('❌ Google button not found');
+    if (typeof google === 'undefined') {
+        setTimeout(initializeGoogleSignIn, 300);
         return;
     }
 
-    googleBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        handleGoogleSignIn();
-    });
-}
-
-// Handle Google Sign-In
-function handleGoogleSignIn() {
-    // Initialize Google Sign-In with callback
     google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: handleGoogleResponse,
         auto_select: false,
-        cancel_on_tap_outside: true
+        cancel_on_tap_outside: true,
+        context: 'signup',
+        itp_support: true,
+        ux_mode: 'popup', // ✅ on-page native card, NOT a new tab
     });
 
-    // Prompt the user to sign in
-    google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // Fallback: show the One Tap dialog
-            console.log('Prompt not displayed, showing popup');
-            showGooglePopup();
+    // Wire up your "Continue with Google" button
+    const googleBtn = document.getElementById('googleSignInBtn');
+    if (googleBtn) {
+        googleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            triggerOneTap();
+        });
+    }
+
+    // Auto-show One Tap on page load if not already signed in
+    verifyExistingToken().then(isLoggedIn => {
+        if (!isLoggedIn) {
+            setTimeout(() => {
+                google.accounts.id.prompt((notification) => {
+                    if (notification.isNotDisplayed()) {
+                        console.warn('One Tap not displayed:', notification.getNotDisplayedReason());
+                        // Common reasons:
+                        // 'opt_out_or_no_session'  — no Google session in browser
+                        // 'suppressed_by_user'     — dismissed before (cooldown active)
+                        // 'unregistered_origin'    — domain not in Google Cloud Console
+                    }
+                });
+            }, 1000);
         }
     });
 }
 
-// Alternative: Show Google popup for sign-in
-function showGooglePopup() {
-    google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleGoogleResponse,
-    });
+// ─── Trigger One Tap on button click ──────────────────────────────────────────
+function triggerOneTap() {
+    if (typeof google === 'undefined') return;
 
-    // This will show a popup window
-    const client = google.accounts.oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID,
-        scope: 'email profile',
-        callback: async (response) => {
-            if (response.access_token) {
-                await verifyGoogleToken(response.access_token);
-            }
-        },
+    google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            // One Tap suppressed — show official Google button in corner as fallback
+            showFallbackButton();
+        }
     });
-    
-    client.requestAccessToken();
 }
 
-// Handle the Google response (ID token)
+// ─── Fallback: official Google button anchored bottom-right ───────────────────
+function showFallbackButton() {
+    if (document.getElementById('brightnal-gsi-fallback')) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.id = 'brightnal-gsi-fallback';
+    wrapper.style.cssText = `
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 99999;
+        border-radius: 12px;
+        overflow: visible;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+        animation: gsi-slide-up 0.35s cubic-bezier(0.32,0.72,0,1) both;
+    `;
+
+    const close = document.createElement('button');
+    close.textContent = '×';
+    close.style.cssText = `
+        position: absolute;
+        top: -10px; right: -10px;
+        width: 24px; height: 24px;
+        background: #333; border: none;
+        border-radius: 50%;
+        font-size: 16px; line-height: 24px; text-align: center;
+        cursor: pointer; color: #fff;
+        z-index: 1;
+    `;
+    close.onclick = () => wrapper.remove();
+    wrapper.appendChild(close);
+
+    const btnContainer = document.createElement('div');
+    btnContainer.style.cssText = 'padding: 16px; background: #fff; border-radius: 12px;';
+    wrapper.appendChild(btnContainer);
+
+    document.body.appendChild(wrapper);
+
+    if (!document.getElementById('gsi-fallback-style')) {
+        const s = document.createElement('style');
+        s.id = 'gsi-fallback-style';
+        s.textContent = `
+            @keyframes gsi-slide-up {
+                from { opacity: 0; transform: translateY(40px); }
+                to   { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(s);
+    }
+
+    google.accounts.id.renderButton(btnContainer, {
+        theme: 'outline',
+        size: 'large',
+        text: 'signup_with',
+        shape: 'rectangular',
+        width: 260,
+    });
+}
+
+// ─── Handle credential returned by Google ─────────────────────────────────────
 async function handleGoogleResponse(response) {
     const idToken = response.credential;
-    
+
     if (!idToken) {
-        console.error('❌ No ID token received');
-        showError('Sign-in failed. Please try again.');
+        showToast('Sign-in failed. Please try again.', 'error');
         return;
     }
 
-    try {
-        // Show loading state
-        showLoading();
+    setGoogleBtnLoading(true);
 
-        // Send token to backend for verification
+    try {
         const result = await fetch(`${BACKEND_URL}/api/auth/google`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ token: idToken }),
         });
 
         const data = await result.json();
 
         if (data.success) {
-            // Store JWT token
             localStorage.setItem('auth_token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
-            
-            // Show success and redirect
-            showSuccess(data.user);
-            
-            // Redirect after 1.5 seconds
-            setTimeout(() => {
-                window.location.href = '/explore'; // Update with your redirect URL
-            }, 1500);
+            showToast(`Welcome, ${data.user.full_name || 'back'}! 👋`, 'success');
+            setTimeout(() => { window.location.href = '/explore'; }, 1500);
         } else {
-            showError(data.message || 'Authentication failed');
+            showToast(data.message || 'Authentication failed', 'error');
         }
-
-        hideLoading();
-
-    } catch (error) {
-        console.error('❌ Authentication error:', error);
-        showError('Network error. Please check your connection.');
-        hideLoading();
+    } catch (err) {
+        console.error('Auth error:', err);
+        showToast('Network error. Check your connection.', 'error');
+    } finally {
+        setGoogleBtnLoading(false);
     }
 }
 
-// Verify if user is already logged in
+// ─── Verify stored token ───────────────────────────────────────────────────────
 async function verifyExistingToken() {
     const token = localStorage.getItem('auth_token');
-    
     if (!token) return false;
 
     try {
-        const response = await fetch(`${BACKEND_URL}/api/verify-token`, {
+        const res = await fetch(`${BACKEND_URL}/api/verify-token`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+            },
         });
-
-        const data = await response.json();
-
-        if (data.success) {
-            // User is already logged in
-            return true;
-        } else {
-            // Token is invalid, clear it
+        const data = await res.json();
+        if (!data.success) {
             localStorage.removeItem('auth_token');
             localStorage.removeItem('user');
             return false;
         }
-    } catch (error) {
-        console.error('❌ Token verification error:', error);
+        return true;
+    } catch {
         return false;
     }
 }
 
-// UI Helper Functions
-function showLoading() {
-    const googleBtn = document.querySelector('.btn-google');
-    const originalText = googleBtn.innerHTML;
-    googleBtn.dataset.originalText = originalText;
-    googleBtn.innerHTML = `
-        <svg class="spinner" viewBox="0 0 24 24" style="width: 20px; height: 20px; margin-right: 8px;">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" opacity="0.25"/>
-            <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
-        </svg>
-        Signing in...
-    `;
-    googleBtn.disabled = true;
-    
-    // Add spinner animation
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .spinner { animation: spin 1s linear infinite; }
-    `;
-    document.head.appendChild(style);
-}
+// ─── UI Helpers ───────────────────────────────────────────────────────────────
+function setGoogleBtnLoading(isLoading) {
+    const btn = document.getElementById('googleSignInBtn');
+    if (!btn) return;
 
-function hideLoading() {
-    const googleBtn = document.querySelector('.btn-google');
-    googleBtn.innerHTML = googleBtn.dataset.originalText || 'Continue with Google';
-    googleBtn.disabled = false;
-}
-
-function showSuccess(user) {
-    const overlay = document.getElementById('overlay');
-    const overlayContent = overlay.querySelector('.overlay-content');
-    
-    overlayContent.innerHTML = `
-        <div style="text-align: center; padding: 40px;">
-            <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: #4CAF50; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                <svg style="width: 50px; height: 50px; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-            </div>
-            <h2 style="margin: 20px 0 10px; font-size: 28px; color: #333;">Welcome, ${user.full_name || 'User'}!</h2>
-            <p style="color: #666; font-size: 16px;">You've successfully signed in</p>
-            <p style="color: #999; font-size: 14px; margin-top: 20px;">Redirecting you now...</p>
-        </div>
-    `;
-}
-
-function showError(message) {
-    const overlay = document.getElementById('overlay');
-    const overlayContent = overlay.querySelector('.overlay-content');
-    
-    // Create error notification
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-notification';
-    errorDiv.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #f44336;
-        color: white;
-        padding: 16px 24px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 10000;
-        animation: slideIn 0.3s ease-out;
-    `;
-    errorDiv.textContent = message;
-    
-    document.body.appendChild(errorDiv);
-    
-    // Remove after 4 seconds
-    setTimeout(() => {
-        errorDiv.style.animation = 'slideOut 0.3s ease-in';
-        setTimeout(() => errorDiv.remove(), 300);
-    }, 4000);
-    
-    // Add animations
-    if (!document.getElementById('error-animations')) {
-        const style = document.createElement('style');
-        style.id = 'error-animations';
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(400px); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(400px); opacity: 0; }
-            }
+    if (isLoading) {
+        btn.dataset.html = btn.innerHTML;
+        btn.innerHTML = `
+            <svg style="width:18px;height:18px;margin-right:8px;animation:gsi-spin 0.7s linear infinite;flex-shrink:0" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="#ccc" stroke-width="3"/>
+                <path d="M12 2a10 10 0 0 1 10 10" stroke="#333" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            Signing in...
         `;
-        document.head.appendChild(style);
+        btn.disabled = true;
+        if (!document.getElementById('gsi-spin-style')) {
+            const s = document.createElement('style');
+            s.id = 'gsi-spin-style';
+            s.textContent = '@keyframes gsi-spin { to { transform: rotate(360deg); } }';
+            document.head.appendChild(s);
+        }
+    } else {
+        btn.innerHTML = btn.dataset.html || 'Continue with Google';
+        btn.disabled = false;
     }
 }
 
-// Logout function
+function showToast(message, type = 'success') {
+    const existing = document.getElementById('brightnal-toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.id = 'brightnal-toast';
+    toast.textContent = message;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%) translateY(60px);
+        background: ${type === 'success' ? '#111' : '#e53935'};
+        color: #fff;
+        padding: 12px 28px;
+        border-radius: 100px;
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 999999;
+        transition: transform 0.3s cubic-bezier(0.32,0.72,0,1), opacity 0.3s;
+        opacity: 0;
+        white-space: nowrap;
+    `;
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+        toast.style.opacity = '1';
+    }));
+
+    setTimeout(() => {
+        toast.style.transform = 'translateX(-50%) translateY(60px)';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, 3500);
+}
+
+// ─── Auth utilities ───────────────────────────────────────────────────────────
 function logout() {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
-    google.accounts.id.disableAutoSelect();
-    window.location.href = '/index.html'; // Redirect to home
+    if (typeof google !== 'undefined') google.accounts.id.disableAutoSelect();
+    window.location.href = '/index.html';
 }
 
-// Protected page check
 function requireAuth() {
     const token = localStorage.getItem('auth_token');
-    
-    if (!token) {
-        window.location.href = '/index.html';
-        return false;
-    }
-    
-    // Optionally verify token with backend
-    verifyExistingToken().then(isValid => {
-        if (!isValid) {
-            window.location.href = '/index.html';
-        }
-    });
-    
+    if (!token) { window.location.href = '/index.html'; return false; }
+    verifyExistingToken().then(valid => { if (!valid) window.location.href = '/index.html'; });
     return true;
 }
 
-// Get current user
 function getCurrentUser() {
-    const userStr = localStorage.getItem('user');
-    return userStr ? JSON.parse(userStr) : null;
+    const u = localStorage.getItem('user');
+    return u ? JSON.parse(u) : null;
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    // Check if user is already logged in
-    verifyExistingToken().then(isLoggedIn => {
-        if (isLoggedIn) {
-            console.log('✅ User already logged in');
-            // Optionally redirect or update UI
-            // window.location.href = '/dashboard.html';
-        } else {
-            // Initialize Google Sign-In
-            initializeGoogleSignIn();
-        }
-    });
+// ─── Boot ─────────────────────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+    initializeGoogleSignIn();
 });
 
-// Export functions for use in other scripts
-window.BrightnalAuth = {
-    logout,
-    requireAuth,
-    getCurrentUser,
-    verifyExistingToken
-};
+window.BrightnalAuth = { logout, requireAuth, getCurrentUser, verifyExistingToken };
