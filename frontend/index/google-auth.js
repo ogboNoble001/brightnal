@@ -1,78 +1,21 @@
-// Improved Google Sign-In with better error handling and debugging
+// Google Sign-In - FULLY OPEN FOR LOCAL DEVELOPMENT
+// All restrictions removed, maximum logging enabled
 
 const BACKEND_URL = 'https://brightnal-backend.vercel.app';
+// const BACKEND_URL = 'http://localhost:7700'; // Uncomment for local backend
 const GOOGLE_CLIENT_ID = '81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com';
-
-// ─── Handle credential returned by Google ─────────────────────────────────────
-async function handleGoogleResponse(response) {
-    const idToken = response.credential;
-
-    if (!idToken) {
-        showToast('Sign-in failed. Please try again.', 'error');
-        return;
-    }
-
-    setGoogleBtnLoading(true);
-
-    try {
-        console.log('🔄 Attempting authentication...'); // Debug log
-        
-        const result = await fetch(`${BACKEND_URL}/api/auth/google`, {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({ token: idToken }),
-            credentials: 'include' // Important for CORS
-        });
-
-        console.log('📥 Response status:', result.status); // Debug log
-
-        // Check if response is JSON
-        const contentType = result.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            console.error('❌ Server returned non-JSON response');
-            showToast('Server error. Please try again later.', 'error');
-            setGoogleBtnLoading(false);
-            return;
-        }
-
-        const data = await result.json();
-        console.log('📦 Response data:', data); // Debug log
-
-        if (data.success) {
-            localStorage.setItem('auth_token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            showToast(`Welcome, ${data.user.full_name || 'back'}! 👋`, 'success');
-            setTimeout(() => { window.location.href = '/explore'; }, 1500);
-        } else {
-            showToast(data.message || 'Authentication failed', 'error');
-        }
-    } catch (err) {
-        console.error('❌ Auth error:', err);
-        
-        // More specific error messages
-        if (err.name === 'TypeError' && err.message.includes('fetch')) {
-            showToast('Cannot connect to server. Check if backend is running.', 'error');
-        } else if (err.message.includes('CORS')) {
-            showToast('CORS error. Check backend configuration.', 'error');
-        } else if (err.message.includes('Network')) {
-            showToast('Network error. Check your internet connection.', 'error');
-        } else {
-            showToast('Authentication failed. Please try again.', 'error');
-        }
-    } finally {
-        setGoogleBtnLoading(false);
-    }
-}
 
 // ─── Initialize One Tap ────────────────────────────────────────────────────────
 function initializeGoogleSignIn() {
+    console.log('🔵 Initializing Google Sign-In...');
+    
     if (typeof google === 'undefined') {
+        console.log('⏳ Waiting for Google API to load...');
         setTimeout(initializeGoogleSignIn, 300);
         return;
     }
+
+    console.log('✅ Google API loaded');
 
     google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
@@ -84,20 +27,34 @@ function initializeGoogleSignIn() {
         ux_mode: 'popup',
     });
 
+    console.log('✅ Google Sign-In initialized');
+
+    // Wire up button
     const googleBtn = document.getElementById('googleSignInBtn');
     if (googleBtn) {
+        console.log('✅ Google button found');
         googleBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            console.log('🔵 Button clicked - triggering One Tap');
             triggerOneTap();
         });
+    } else {
+        console.warn('⚠️ Google button not found in DOM');
     }
 
+    // Check if already logged in
     verifyExistingToken().then(isLoggedIn => {
+        console.log('🔵 Already logged in:', isLoggedIn);
         if (!isLoggedIn) {
             setTimeout(() => {
+                console.log('🔵 Auto-showing One Tap prompt');
                 google.accounts.id.prompt((notification) => {
                     if (notification.isNotDisplayed()) {
-                        console.warn('One Tap not displayed:', notification.getNotDisplayedReason());
+                        console.warn('⚠️ One Tap not displayed:', notification.getNotDisplayedReason());
+                    } else if (notification.isSkippedMoment()) {
+                        console.warn('⚠️ One Tap skipped');
+                    } else {
+                        console.log('✅ One Tap displayed successfully');
                     }
                 });
             }, 1000);
@@ -105,20 +62,30 @@ function initializeGoogleSignIn() {
     });
 }
 
-// ─── Trigger One Tap on button click ──────────────────────────────────────────
+// ─── Trigger One Tap ──────────────────────────────────────────────────────────
 function triggerOneTap() {
-    if (typeof google === 'undefined') return;
+    if (typeof google === 'undefined') {
+        console.error('❌ Google API not loaded');
+        return;
+    }
 
+    console.log('🔵 Triggering One Tap...');
     google.accounts.id.prompt((notification) => {
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            console.log('⚠️ One Tap suppressed, showing fallback button');
             showFallbackButton();
         }
     });
 }
 
-// ─── Fallback: official Google button anchored bottom-right ───────────────────
+// ─── Fallback Button ──────────────────────────────────────────────────────────
 function showFallbackButton() {
-    if (document.getElementById('brightnal-gsi-fallback')) return;
+    console.log('🔵 Showing fallback button');
+    
+    if (document.getElementById('brightnal-gsi-fallback')) {
+        console.log('⚠️ Fallback button already exists');
+        return;
+    }
 
     const wrapper = document.createElement('div');
     wrapper.id = 'brightnal-gsi-fallback';
@@ -145,7 +112,10 @@ function showFallbackButton() {
         cursor: pointer; color: #fff;
         z-index: 1;
     `;
-    close.onclick = () => wrapper.remove();
+    close.onclick = () => {
+        console.log('🔵 Closing fallback button');
+        wrapper.remove();
+    };
     wrapper.appendChild(close);
 
     const btnContainer = document.createElement('div');
@@ -173,12 +143,115 @@ function showFallbackButton() {
         shape: 'rectangular',
         width: 260,
     });
+
+    console.log('✅ Fallback button rendered');
 }
 
-// ─── Verify stored token ───────────────────────────────────────────────────────
+// ─── Handle Google Response ───────────────────────────────────────────────────
+async function handleGoogleResponse(response) {
+    console.log('🔵 Google response received');
+    console.log('🔵 Response object:', response);
+    
+    const idToken = response.credential;
+
+    if (!idToken) {
+        console.error('❌ No credential in response');
+        showToast('Sign-in failed. No credential received.', 'error');
+        return;
+    }
+
+    console.log('✅ Token received (first 20 chars):', idToken.substring(0, 20) + '...');
+    setGoogleBtnLoading(true);
+
+    try {
+        console.log('🔵 Sending token to backend:', BACKEND_URL);
+        console.log('🔵 Request payload:', { token: idToken.substring(0, 30) + '...' });
+        
+        const result = await fetch(`${BACKEND_URL}/api/auth/google`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ token: idToken }),
+            mode: 'cors', // Explicitly set CORS mode
+        });
+
+        console.log('📥 Response status:', result.status);
+        console.log('📥 Response headers:', Object.fromEntries(result.headers.entries()));
+
+        // Try to parse response
+        let data;
+        try {
+            const text = await result.text();
+            console.log('📥 Raw response:', text);
+            data = JSON.parse(text);
+            console.log('📥 Parsed response:', data);
+        } catch (parseError) {
+            console.error('❌ Failed to parse response:', parseError);
+            showToast('Server returned invalid response', 'error');
+            setGoogleBtnLoading(false);
+            return;
+        }
+
+        if (data.success) {
+            console.log('✅ Authentication successful');
+            console.log('✅ User data:', data.user);
+            console.log('✅ Token received:', data.token.substring(0, 20) + '...');
+            
+            localStorage.setItem('auth_token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            
+            console.log('✅ Data saved to localStorage');
+            
+            showToast(`Welcome, ${data.user.full_name || 'back'}! 👋`, 'success');
+            
+            console.log('🔵 Redirecting to /explore in 1.5s');
+            setTimeout(() => { 
+                window.location.href = '/explore'; 
+            }, 1500);
+        } else {
+            console.error('❌ Authentication failed:', data.message);
+            showToast(data.message || 'Authentication failed', 'error');
+        }
+    } catch (err) {
+        console.error('❌ Fetch error:', err);
+        console.error('❌ Error name:', err.name);
+        console.error('❌ Error message:', err.message);
+        console.error('❌ Error stack:', err.stack);
+        
+        // Very detailed error message
+        let errorMsg = 'Unknown error occurred';
+        
+        if (err.name === 'TypeError') {
+            errorMsg = 'Network error - Cannot reach backend server';
+            console.error('💡 Possible causes:');
+            console.error('   1. Backend server is not running');
+            console.error('   2. Wrong backend URL');
+            console.error('   3. Network/firewall blocking request');
+            console.error('   4. CORS issue (check browser console for CORS errors)');
+        } else if (err.message.includes('Failed to fetch')) {
+            errorMsg = 'Cannot connect to server - Check backend URL';
+        } else if (err.message.includes('NetworkError')) {
+            errorMsg = 'Network error - Check your connection';
+        }
+        
+        showToast(errorMsg, 'error');
+    } finally {
+        setGoogleBtnLoading(false);
+    }
+}
+
+// ─── Verify Token ─────────────────────────────────────────────────────────────
 async function verifyExistingToken() {
     const token = localStorage.getItem('auth_token');
-    if (!token) return false;
+    
+    if (!token) {
+        console.log('🔵 No token found in localStorage');
+        return false;
+    }
+
+    console.log('🔵 Verifying existing token...');
 
     try {
         const res = await fetch(`${BACKEND_URL}/api/verify-token`, {
@@ -188,14 +261,21 @@ async function verifyExistingToken() {
                 'Content-Type': 'application/json',
             },
         });
+        
         const data = await res.json();
+        console.log('🔵 Token verification result:', data);
+        
         if (!data.success) {
+            console.log('⚠️ Token invalid, clearing storage');
             localStorage.removeItem('auth_token');
             localStorage.removeItem('user');
             return false;
         }
+        
+        console.log('✅ Token valid');
         return true;
-    } catch {
+    } catch (error) {
+        console.error('❌ Token verification error:', error);
         return false;
     }
 }
@@ -203,9 +283,13 @@ async function verifyExistingToken() {
 // ─── UI Helpers ───────────────────────────────────────────────────────────────
 function setGoogleBtnLoading(isLoading) {
     const btn = document.getElementById('googleSignInBtn');
-    if (!btn) return;
+    if (!btn) {
+        console.warn('⚠️ Cannot set button loading state - button not found');
+        return;
+    }
 
     if (isLoading) {
+        console.log('🔵 Setting button to loading state');
         btn.dataset.html = btn.innerHTML;
         btn.innerHTML = `
             <svg style="width:18px;height:18px;margin-right:8px;animation:gsi-spin 0.7s linear infinite;flex-shrink:0" viewBox="0 0 24 24" fill="none">
@@ -215,6 +299,7 @@ function setGoogleBtnLoading(isLoading) {
             Signing in...
         `;
         btn.disabled = true;
+        
         if (!document.getElementById('gsi-spin-style')) {
             const s = document.createElement('style');
             s.id = 'gsi-spin-style';
@@ -222,12 +307,15 @@ function setGoogleBtnLoading(isLoading) {
             document.head.appendChild(s);
         }
     } else {
+        console.log('🔵 Resetting button state');
         btn.innerHTML = btn.dataset.html || 'Continue with Google';
         btn.disabled = false;
     }
 }
 
 function showToast(message, type = 'success') {
+    console.log(`🔵 Showing toast: [${type}] ${message}`);
+    
     const existing = document.getElementById('brightnal-toast');
     if (existing) existing.remove();
 
@@ -264,29 +352,64 @@ function showToast(message, type = 'success') {
     }, 3500);
 }
 
-// ─── Auth utilities ───────────────────────────────────────────────────────────
+// ─── Auth Utilities ───────────────────────────────────────────────────────────
 function logout() {
+    console.log('🔵 Logging out...');
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user');
-    if (typeof google !== 'undefined') google.accounts.id.disableAutoSelect();
+    if (typeof google !== 'undefined') {
+        google.accounts.id.disableAutoSelect();
+    }
+    console.log('✅ Logged out, redirecting to home');
     window.location.href = '/index.html';
 }
 
 function requireAuth() {
+    console.log('🔵 Checking authentication...');
     const token = localStorage.getItem('auth_token');
-    if (!token) { window.location.href = '/index.html'; return false; }
-    verifyExistingToken().then(valid => { if (!valid) window.location.href = '/index.html'; });
+    
+    if (!token) {
+        console.log('❌ No token found, redirecting to home');
+        window.location.href = '/index.html';
+        return false;
+    }
+    
+    console.log('✅ Token found, verifying...');
+    verifyExistingToken().then(valid => {
+        if (!valid) {
+            console.log('❌ Token invalid, redirecting to home');
+            window.location.href = '/index.html';
+        } else {
+            console.log('✅ Token valid, access granted');
+        }
+    });
+    
     return true;
 }
 
 function getCurrentUser() {
     const u = localStorage.getItem('user');
-    return u ? JSON.parse(u) : null;
+    const user = u ? JSON.parse(u) : null;
+    console.log('🔵 Current user:', user);
+    return user;
 }
 
-// ─── Boot ─────────────────────────────────────────────────────────────────────
+// ─── Initialize ───────────────────────────────────────────────────────────────
 window.addEventListener('load', () => {
+    console.log('🔵 Page loaded, initializing auth system');
+    console.log('🔵 Backend URL:', BACKEND_URL);
+    console.log('🔵 Google Client ID:', GOOGLE_CLIENT_ID);
     initializeGoogleSignIn();
 });
 
-window.BrightnalAuth = { logout, requireAuth, getCurrentUser, verifyExistingToken };
+// Export functions
+window.BrightnalAuth = { 
+    logout, 
+    requireAuth, 
+    getCurrentUser, 
+    verifyExistingToken 
+};
+
+console.log('✅ Google Auth script loaded');
+console.log('🔵 Debug mode: FULL LOGGING ENABLED');
+console.log('🔵 Open DevTools Console (F12) to see all logs');
