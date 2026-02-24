@@ -1,13 +1,13 @@
 // Google Sign-In - FULLY OPEN FOR LOCAL DEVELOPMENT
-// All restrictions removed, maximum logging enabled
+// Updated to use Render.com backend
 
-const BACKEND_URL = 'https://brightnal-backend.vercel.app';
-// const BACKEND_URL = 'http://localhost:7700'; // Uncomment for local backend
+const BACKEND_URL = 'https://brightnal.onrender.com'; // ✅ FIXED: Using correct Render URL
 const GOOGLE_CLIENT_ID = '81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com';
 
 // ─── Initialize One Tap ────────────────────────────────────────────────────────
 function initializeGoogleSignIn() {
     console.log('🔵 Initializing Google Sign-In...');
+    console.log('🔵 Backend URL:', BACKEND_URL);
     
     if (typeof google === 'undefined') {
         console.log('⏳ Waiting for Google API to load...');
@@ -174,7 +174,7 @@ async function handleGoogleResponse(response) {
                 'Accept': 'application/json'
             },
             body: JSON.stringify({ token: idToken }),
-            mode: 'cors', // Explicitly set CORS mode
+            mode: 'cors',
         });
 
         console.log('📥 Response status:', result.status);
@@ -220,14 +220,13 @@ async function handleGoogleResponse(response) {
         console.error('❌ Error message:', err.message);
         console.error('❌ Error stack:', err.stack);
         
-        // Very detailed error message
         let errorMsg = 'Unknown error occurred';
         
         if (err.name === 'TypeError') {
             errorMsg = 'Network error - Cannot reach backend server';
             console.error('💡 Possible causes:');
             console.error('   1. Backend server is not running');
-            console.error('   2. Wrong backend URL');
+            console.error('   2. Wrong backend URL:', BACKEND_URL);
             console.error('   3. Network/firewall blocking request');
             console.error('   4. CORS issue (check browser console for CORS errors)');
         } else if (err.message.includes('Failed to fetch')) {
