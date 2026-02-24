@@ -1,16 +1,16 @@
 window.onload = () => {
   const overlay_jwt = document.getElementById('overlay_jwt');
   
-  // ✅ FIXED: Use correct token name that matches google-auth.js
-  const token = localStorage.getItem("auth_token"); // Changed from "jwtToken"
+  // ✅ Use correct token name that matches google-auth.js
+  const token = localStorage.getItem("auth_token");
   
   if (token) {
     console.log('🔵 Token found, verifying...');
     // show overlay while verifying
     overlay_jwt.classList.remove('hidden_jwt');
     
-    // ✅ FIXED: Use correct backend URL
-    fetch("https://brightnal-backend.vercel.app/api/verify-token", {  // Changed from onrender.com
+    // ✅ FIXED: Use Render.com backend URL
+    fetch("https://brightnal.onrender.com/api/verify-token", {
         method: "POST",
         headers: { 
           "Authorization": `Bearer ${token}`,
@@ -30,7 +30,7 @@ window.onload = () => {
         } else {
           console.log('❌ Token invalid, clearing storage');
           overlay_jwt.classList.add('hidden_jwt');
-          localStorage.removeItem("auth_token"); // Changed from "jwtToken"
+          localStorage.removeItem("auth_token");
           localStorage.removeItem("user");
         }
       })
