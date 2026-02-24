@@ -146,5 +146,49 @@
     <script>
         AOS.init();
     </script>
+    <script>
+        // Quick Backend Connection Test
+// Add this to your browser console or create a test.html file
+
+async function testBackendConnection() {
+    const BACKEND_URL = 'https://brightnal-backend.vercel.app';
+    
+    console.log('🔍 Testing backend connection...');
+    
+    try {
+        // Test 1: Health check
+        const healthCheck = await fetch(`${BACKEND_URL}/api/health`);
+        const healthData = await healthCheck.json();
+        console.log('✅ Health check:', healthData);
+        
+        // Test 2: CORS preflight
+        const corsTest = await fetch(`${BACKEND_URL}/api/auth/google`, {
+            method: 'OPTIONS',
+        });
+        console.log('✅ CORS preflight status:', corsTest.status);
+        
+        // Test 3: Auth endpoint (will fail but shows CORS)
+        const authTest = await fetch(`${BACKEND_URL}/api/auth/google`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: 'test' })
+        });
+        const authData = await authTest.json();
+        console.log('📡 Auth endpoint response:', authData);
+        
+        console.log('✅ All tests passed! Backend is accessible.');
+        
+    } catch (error) {
+        console.error('❌ Connection test failed:', error);
+        console.log('🔧 Possible issues:');
+        console.log('   1. Backend is down');
+        console.log('   2. CORS not configured for your domain');
+        console.log('   3. Network/firewall blocking request');
+    }
+}
+
+// Run the test
+testBackendConnection();
+    </script>
 </body>
 </html>

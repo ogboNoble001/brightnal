@@ -1,8 +1,71 @@
-// Google Sign-In Implementation for Brightnal
-// Uses Google One Tap — the native on-page sign-in prompt, no tabs or custom modals
+// Improved Google Sign-In with better error handling and debugging
 
 const BACKEND_URL = 'https://brightnal-backend.vercel.app';
 const GOOGLE_CLIENT_ID = '81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com';
+
+// ─── Handle credential returned by Google ─────────────────────────────────────
+async function handleGoogleResponse(response) {
+    const idToken = response.credential;
+
+    if (!idToken) {
+        showToast('Sign-in failed. Please try again.', 'error');
+        return;
+    }
+
+    setGoogleBtnLoading(true);
+
+    try {
+        console.log('🔄 Attempting authentication...'); // Debug log
+        
+        const result = await fetch(`${BACKEND_URL}/api/auth/google`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ token: idToken }),
+            credentials: 'include' // Important for CORS
+        });
+
+        console.log('📥 Response status:', result.status); // Debug log
+
+        // Check if response is JSON
+        const contentType = result.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            console.error('❌ Server returned non-JSON response');
+            showToast('Server error. Please try again later.', 'error');
+            setGoogleBtnLoading(false);
+            return;
+        }
+
+        const data = await result.json();
+        console.log('📦 Response data:', data); // Debug log
+
+        if (data.success) {
+            localStorage.setItem('auth_token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            showToast(`Welcome, ${data.user.full_name || 'back'}! 👋`, 'success');
+            setTimeout(() => { window.location.href = '/explore'; }, 1500);
+        } else {
+            showToast(data.message || 'Authentication failed', 'error');
+        }
+    } catch (err) {
+        console.error('❌ Auth error:', err);
+        
+        // More specific error messages
+        if (err.name === 'TypeError' && err.message.includes('fetch')) {
+            showToast('Cannot connect to server. Check if backend is running.', 'error');
+        } else if (err.message.includes('CORS')) {
+            showToast('CORS error. Check backend configuration.', 'error');
+        } else if (err.message.includes('Network')) {
+            showToast('Network error. Check your internet connection.', 'error');
+        } else {
+            showToast('Authentication failed. Please try again.', 'error');
+        }
+    } finally {
+        setGoogleBtnLoading(false);
+    }
+}
 
 // ─── Initialize One Tap ────────────────────────────────────────────────────────
 function initializeGoogleSignIn() {
@@ -18,10 +81,9 @@ function initializeGoogleSignIn() {
         cancel_on_tap_outside: true,
         context: 'signup',
         itp_support: true,
-        ux_mode: 'popup', // ✅ on-page native card, NOT a new tab
+        ux_mode: 'popup',
     });
 
-    // Wire up your "Continue with Google" button
     const googleBtn = document.getElementById('googleSignInBtn');
     if (googleBtn) {
         googleBtn.addEventListener('click', (e) => {
@@ -30,17 +92,12 @@ function initializeGoogleSignIn() {
         });
     }
 
-    // Auto-show One Tap on page load if not already signed in
     verifyExistingToken().then(isLoggedIn => {
         if (!isLoggedIn) {
             setTimeout(() => {
                 google.accounts.id.prompt((notification) => {
                     if (notification.isNotDisplayed()) {
                         console.warn('One Tap not displayed:', notification.getNotDisplayedReason());
-                        // Common reasons:
-                        // 'opt_out_or_no_session'  — no Google session in browser
-                        // 'suppressed_by_user'     — dismissed before (cooldown active)
-                        // 'unregistered_origin'    — domain not in Google Cloud Console
                     }
                 });
             }, 1000);
@@ -54,7 +111,6 @@ function triggerOneTap() {
 
     google.accounts.id.prompt((notification) => {
         if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            // One Tap suppressed — show official Google button in corner as fallback
             showFallbackButton();
         }
     });
@@ -117,42 +173,6 @@ function showFallbackButton() {
         shape: 'rectangular',
         width: 260,
     });
-}
-
-// ─── Handle credential returned by Google ─────────────────────────────────────
-async function handleGoogleResponse(response) {
-    const idToken = response.credential;
-
-    if (!idToken) {
-        showToast('Sign-in failed. Please try again.', 'error');
-        return;
-    }
-
-    setGoogleBtnLoading(true);
-
-    try {
-        const result = await fetch(`${BACKEND_URL}/api/auth/google`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token: idToken }),
-        });
-
-        const data = await result.json();
-
-        if (data.success) {
-            localStorage.setItem('auth_token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            showToast(`Welcome, ${data.user.full_name || 'back'}! 👋`, 'success');
-            setTimeout(() => { window.location.href = '/explore'; }, 1500);
-        } else {
-            showToast(data.message || 'Authentication failed', 'error');
-        }
-    } catch (err) {
-        console.error('Auth error:', err);
-        showToast('Network error. Check your connection.', 'error');
-    } finally {
-        setGoogleBtnLoading(false);
-    }
 }
 
 // ─── Verify stored token ───────────────────────────────────────────────────────
