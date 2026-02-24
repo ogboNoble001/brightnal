@@ -1,41 +1,60 @@
 window.onload = () => {
   const overlay_jwt = document.getElementById('overlay_jwt');
-  const token = localStorage.getItem("jwtToken");
+  
+  // ✅ FIXED: Use correct token name that matches google-auth.js
+  const token = localStorage.getItem("auth_token"); // Changed from "jwtToken"
   
   if (token) {
+    console.log('🔵 Token found, verifying...');
     // show overlay while verifying
     overlay_jwt.classList.remove('hidden_jwt');
     
-    fetch("https://brightnal.onrender.com/api/verify-token", {
+    // ✅ FIXED: Use correct backend URL
+    fetch("https://brightnal-backend.vercel.app/api/verify-token", {  // Changed from onrender.com
         method: "POST",
-        headers: { "Authorization": `Bearer ${token}` }
+        headers: { 
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
       })
-      .then(res => res.json())
+      .then(res => {
+        console.log('📥 Verification response status:', res.status);
+        return res.json();
+      })
       .then(data => {
+        console.log('📥 Verification data:', data);
         if (data.success) {
+          console.log('✅ Token valid, redirecting to /explore');
           // ✅ replace the login page in history
           window.location.replace("/explore");
         } else {
+          console.log('❌ Token invalid, clearing storage');
           overlay_jwt.classList.add('hidden_jwt');
-          localStorage.removeItem("jwtToken");
+          localStorage.removeItem("auth_token"); // Changed from "jwtToken"
           localStorage.removeItem("user");
         }
       })
       .catch(err => {
-        console.error("JWT verification error:", err);
+        console.error("❌ JWT verification error:", err);
         overlay_jwt.classList.add('hidden_jwt');
+        // Clear invalid tokens
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("user");
       });
     
   } else {
+    console.log('🔵 No token found');
     // no token → hide overlay immediately
     overlay_jwt.classList.add('hidden_jwt');
   }
+  
   const exploreBtn = document.querySelector('.exploreBtn')
   if (exploreBtn) {
     exploreBtn.addEventListener('click', () => {
       window.location.href = './explore'
     })
   }
+  
   if (typeof AOS !== "undefined") {
     AOS.init({
       offset: 20,
