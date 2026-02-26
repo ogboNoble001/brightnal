@@ -8,24 +8,8 @@
     <link rel="stylesheet" href="/frontend/index/iota.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="/frontend/util/CSS_STYLESHEETS/util_main.css">
-    <script src="token.js" type="text/javascript" charset="utf-8"></script>
-    <!-- ✅ Required: Tells Google which client to use for One Tap -->
-    <meta name="google-signin-client_id" content="81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com">
-
-    <!-- ✅ Google Identity Services — loaded early, synchronously so it's ready -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-
-    <!-- ✅ Google One Tap renders itself into this div automatically -->
-    <div id="g_id_onload"
-         data-client_id="81041045325-n7uqt6bk0ld60kr2ie1el9v3regn3k0m.apps.googleusercontent.com"
-         data-callback="handleGoogleResponse"
-         data-auto_select="false"
-         data-cancel_on_tap_outside="true"
-         data-context="signup"
-         data-itp_support="true">
-    </div>
 
     <div class="overlay_jwt" id="overlay_jwt"></div>
 
@@ -115,80 +99,20 @@
             <h2>Like a <span>boss</span></h2>
             <button class="btn-primary exploreBtn">Shop now</button>
 
-            <!-- ✅ This button triggers Google One Tap prompt on click -->
-            <button class="btn-google" id="googleSignInBtn">
-                <svg class="google-icon" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                Continue with Google
-            </button>
-
             <div class="overlay-links">
                 <p>Already a member? <a href="#" id="loginLink">Log in</a></p>
                 <p style="margin-top: 12px;">Want wholesales? <a href="#">Get started here</a></p>
             </div>
 
             <div class="overlay-footer">
-                By shopping, you agree to our<a href="#"> Terms of Service</a> and<br>
-                have also read <b>our </b> <a href="#">Privacy Policy</a>.
+                By shopping, you agree to our <a href="#">Terms of Service</a> and<br>
+                have also read <b>our</b> <a href="#">Privacy Policy</a>.
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="/frontend/index/index.js"></script>
-    <script src="/frontend/index/google-auth.js"></script>
 
-    <script>
-        AOS.init();
-    </script>
-    <script>
-        // Quick Backend Connection Test
-// Add this to your browser console or create a test.html file
-
-async function testBackendConnection() {
-    const BACKEND_URL = 'https://brightnal-backend.vercel.app';
-    
-    console.log('🔍 Testing backend connection...');
-    
-    try {
-        // Test 1: Health check
-        const healthCheck = await fetch(`${BACKEND_URL}/api/health`);
-        const healthData = await healthCheck.json();
-        console.log('✅ Health check:', healthData);
-        
-        // Test 2: CORS preflight
-        const corsTest = await fetch(`${BACKEND_URL}/api/auth/google`, {
-            method: 'OPTIONS',
-        });
-        console.log('✅ CORS preflight status:', corsTest.status);
-        
-        // Test 3: Auth endpoint (will fail but shows CORS)
-        const authTest = await fetch(`${BACKEND_URL}/api/auth/google`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token: 'test' })
-        });
-        const authData = await authTest.json();
-        console.log('📡 Auth endpoint response:', authData);
-        
-        console.log('✅ All tests passed! Backend is accessible.');
-        
-    } catch (error) {
-        console.error('❌ Connection test failed:', error);
-        console.log('🔧 Possible issues:');
-        console.log('   1. Backend is down');
-        console.log('   2. CORS not configured for your domain');
-        console.log('   3. Network/firewall blocking request');
-    }
-}
-
-// Run the test
-testBackendConnection();
-    </script>
 </body>
 </html>
